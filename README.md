@@ -1,3 +1,6 @@
+
+[![Build Status](https://travis-ci.org/dtimofeev/Sanitizer.svg?branch=master)](https://travis-ci.org/dtimofeev/Sanitizer)
+
 # Overview
 Sanitizer is a simple PHP library for data sanitation done via user predefined sanitize schema.
 
