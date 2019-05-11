@@ -2,6 +2,7 @@
 
 namespace sanitizer;
 
+use sanitizer\schemas\ArraySchema;
 use sanitizer\schemas\BooleanSchema;
 use sanitizer\schemas\IntegerSchema;
 use sanitizer\schemas\StringSchema;
@@ -57,5 +58,12 @@ abstract class SanitizerSchema {
      */
     final public static function string(): StringSchema {
         return new StringSchema();
+    }
+
+    /**
+     * @return ArraySchema
+     */
+    final public static function arr(): ArraySchema {
+        return new ArraySchema();
     }
 }
