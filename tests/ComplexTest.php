@@ -1,0 +1,45 @@
+<?php
+
+namespace sanitizer\tests;
+
+use PHPUnit\Framework\TestCase;
+use sanitizer\Sanitizer;
+use sanitizer\SanitizerSchema;
+use sanitizer\SanitizerSchema as SS;
+use sanitizer\schemas\BooleanSchema;
+
+class ComplexTest extends TestCase {
+    public function testExampleFromReadme(): void {
+        $input = [
+            'id'        => 111,
+            'nickname'  => 'userNickname',
+            'email'     => 'user@mailprovider.org',
+            'ip'        => '127.0.0.1',
+            'favMovies' => [
+                ['title' => 'Doctor Strange', 'tags' => ['marvel', 'magic']],
+                ['title' => 'Star Wars', 'tags' => ['space']],
+            ],
+        ];
+
+        $processed = Sanitizer::process($input, SS::arr()->schema([
+            'id'        => SS::integer()->min(1),
+            'nickname'  => SS::string()->alphaNum(),
+            'email'     => SS::string()->email(),
+            'ip'        => SS::string()->ip(),
+            'sex'       => SS::string()->oneOf(['male', 'female', 'na'])->optional('na'),
+            'favMovies' => SS::arr()->each(
+                SS::arr()->schema([
+                    'title' => SS::string()->trim()->max(200),
+                    // 'release' => SS::date()->format('Y-m-d H:i:s'),
+                    'tags'  => SS::arr()->unique()->each(
+                        SS::string()->alphaNum()
+                    ),
+                ])
+            ),
+        ]));
+
+        $this->assertEquals(array_merge($input, [
+            'sex' => 'na'
+        ]), $processed);
+    }
+}

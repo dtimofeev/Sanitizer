@@ -16,7 +16,7 @@ $processed = Sanitezer::process(true, SS::boolean());
 $processed = Sanitizer::process([
     // Input data
 ], SS::arr()->schema([
-    'id'        => SS::int()->min(1),
+    'id'        => SS::integer()->min(1),
     'nickname'  => SS::string()->alphaNum(),
     'email'     => SS::string()->email(),
     'ip'        => SS::string()->ip(),
