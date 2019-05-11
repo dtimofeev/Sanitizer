@@ -3,29 +3,25 @@
 ### Bool
 
 ### Integer
-- min
-- max
-- between
-- equals
-- not
-- oneOf
-- notOneOf
-- greater
-- less
-- positive
-- negative
+- ~~min~~
+- ~~max~~
+- ~~between~~
+- ~~equals~~
+- ~~not~~
+- ~~oneOf~~
+- ~~notOneOf~~
 
 ### String
-- trim
-- alpha
-- alphaNum
-- email
-- ip
-- length
-- min
-- max
-- regex
-- url
+- ~~trim~~
+- ~~alpha~~
+- ~~alphaNum~~
+- ~~email~~
+- ~~ip~~
+- ~~length~~
+- ~~min~~
+- ~~max~~
+- ~~regex~~
+- ~~url~~
 
 ### Array
 - length

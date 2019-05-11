@@ -4,6 +4,7 @@ namespace sanitizer;
 
 use sanitizer\schemas\BooleanSchema;
 use sanitizer\schemas\IntegerSchema;
+use sanitizer\schemas\StringSchema;
 
 abstract class SanitizerSchema {
     /** @var mixed */
@@ -49,5 +50,12 @@ abstract class SanitizerSchema {
      */
     final public static function integer(): IntegerSchema {
         return new IntegerSchema();
+    }
+
+    /**
+     * @return StringSchema
+     */
+    final public static function string(): StringSchema {
+        return new StringSchema();
     }
 }

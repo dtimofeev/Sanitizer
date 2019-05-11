@@ -10,7 +10,7 @@ class Sanitizer {
      *
      * @return mixed
      */
-    public function process($input, SanitizerSchema $schema, string $field = '$') {
+    public static function process($input, SanitizerSchema $schema, string $field = '$') {
         try {
             return $schema->process($input);
         } catch (\Exception $e) {
