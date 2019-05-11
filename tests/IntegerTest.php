@@ -99,4 +99,19 @@ class IntegerTest extends TestCase {
         $this->expectException(\InvalidArgumentException::class);
         $sanitizer->process(0, SS::integer()->between(100, -100));
     }
+
+    /**
+     * @param mixed $input
+     * @param int $expected
+     *
+     * @dataProvider validCasesProvider
+     */
+    public function testRuleEquals($input, $expected): void {
+        $sanitizer = new Sanitizer();
+
+        $this->assertEquals($expected, $sanitizer->process($input, SS::integer()->equals($expected)));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $sanitizer->process(100, SS::integer()->equals(101));
+    }
 }

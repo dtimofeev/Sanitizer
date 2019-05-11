@@ -5,8 +5,9 @@ namespace sanitizer\schemas;
 use sanitizer\SanitizerSchema;
 
 class IntegerSchema extends SanitizerSchema {
-    private const RULE_MIN = 'min';
-    private const RULE_MAX = 'max';
+    private const RULE_MIN    = 'min';
+    private const RULE_MAX    = 'max';
+    private const RULE_EQUALS = 'equals';
 
     /**
      * @param mixed $input
@@ -27,6 +28,9 @@ class IntegerSchema extends SanitizerSchema {
                     break;
                 case self::RULE_MAX:
                     $this->processRuleMax($rule['value']);
+                    break;
+                case self::RULE_EQUALS:
+                    $this->processRuleEquals($rule['expected']);
                     break;
                 default:
                     break;
@@ -86,6 +90,20 @@ class IntegerSchema extends SanitizerSchema {
     }
 
     /**
+     * @param int $expected
+     *
+     * @return IntegerSchema
+     */
+    public function equals(int $expected): IntegerSchema {
+        $this->rules[] = [
+            'type'     => self::RULE_EQUALS,
+            'expected' => $expected,
+        ];
+
+        return $this;
+    }
+
+    /**
      * @param int $min
      */
     private function processRuleMin(int $min): void {
@@ -97,5 +115,12 @@ class IntegerSchema extends SanitizerSchema {
      */
     private function processRuleMax(int $min): void {
         if ($this->value > $min) throw new \InvalidArgumentException('Value is more than expected maximum of ' . $min);
+    }
+
+    /**
+     * @param int $expected
+     */
+    private function processRuleEquals(int $expected): void {
+        if ($this->value !== $expected) throw new \InvalidArgumentException("Value does not equal expected $expected.");
     }
 }
