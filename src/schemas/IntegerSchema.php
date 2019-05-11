@@ -5,10 +5,12 @@ namespace sanitizer\schemas;
 use sanitizer\SanitizerSchema;
 
 class IntegerSchema extends SanitizerSchema {
-    private const RULE_MIN    = 'min';
-    private const RULE_MAX    = 'max';
-    private const RULE_EQUALS = 'equals';
-    private const RULE_NOT    = 'not';
+    private const RULE_MIN        = 'min';
+    private const RULE_MAX        = 'max';
+    private const RULE_EQUALS     = 'equals';
+    private const RULE_NOT        = 'not';
+    private const RULE_ONE_OF     = 'oneOf';
+    private const RULE_NOT_ONE_OF = 'notOneOf';
 
     /**
      * @param mixed $input
@@ -35,6 +37,12 @@ class IntegerSchema extends SanitizerSchema {
                     break;
                 case self::RULE_NOT:
                     $this->processRuleNot($rule['unexpected']);
+                    break;
+                case self::RULE_ONE_OF:
+                    $this->processRuleOneOf($rule['values']);
+                    break;
+                case self::RULE_NOT_ONE_OF:
+                    $this->processRuleNotOneOf($rule['values']);
                     break;
                 default:
                     break;
@@ -122,6 +130,42 @@ class IntegerSchema extends SanitizerSchema {
     }
 
     /**
+     * @param int[] $values
+     *
+     * @return IntegerSchema
+     */
+    public function oneOf(array $values): IntegerSchema {
+        if (empty($values)) {
+            throw new \InvalidArgumentException('Values for "oneOf" rule should not be an empty array.');
+        }
+
+        $this->rules[] = [
+            'type'   => self::RULE_ONE_OF,
+            'values' => $values,
+        ];
+
+        return $this;
+    }
+
+    /**
+     * @param int[] $values
+     *
+     * @return IntegerSchema
+     */
+    public function notOneOf(array $values): IntegerSchema {
+        if (empty($values)) {
+            throw new \InvalidArgumentException('Values for "notOneOf" rule should not be an empty array.');
+        }
+
+        $this->rules[] = [
+            'type'   => self::RULE_NOT_ONE_OF,
+            'values' => $values,
+        ];
+
+        return $this;
+    }
+
+    /**
      * @param int $min
      */
     private function processRuleMin(int $min): void {
@@ -147,5 +191,27 @@ class IntegerSchema extends SanitizerSchema {
      */
     private function processRuleNot(int $unexpected): void {
         if ($this->value === $unexpected) throw new \InvalidArgumentException("Value should not equal $unexpected.");
+    }
+
+    /**
+     * @param array $values
+     */
+    private function processRuleOneOf(array $values): void {
+        if (!\in_array($this->value, $values, true)) {
+            $valuesString = implode('|', $values);
+
+            throw new \InvalidArgumentException("Value should be one of ($valuesString).");
+        }
+    }
+
+    /**
+     * @param array $values
+     */
+    private function processRuleNotOneOf(array $values): void {
+        if (\in_array($this->value, $values, true)) {
+            $valuesString = implode('|', $values);
+
+            throw new \InvalidArgumentException("Value should not be one of ($valuesString).");
+        }
     }
 }

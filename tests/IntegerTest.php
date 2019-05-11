@@ -74,8 +74,13 @@ class IntegerTest extends TestCase {
 
         $sanitizer->process(1, SS::integer()->min(1));
 
-        $this->expectException(\InvalidArgumentException::class);
-        $sanitizer->process(0, SS::integer()->min(1));
+        try {
+            $sanitizer->process(0, SS::integer()->min(1));
+
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+        }
     }
 
     public function testRuleMax(): void {
@@ -83,8 +88,13 @@ class IntegerTest extends TestCase {
 
         $sanitizer->process(1, SS::integer()->max(1));
 
-        $this->expectException(\InvalidArgumentException::class);
-        $sanitizer->process(2, SS::integer()->max(1));
+        try {
+            $sanitizer->process(2, SS::integer()->max(1));
+
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+        }
     }
 
     public function testRuleBetween(): void {
@@ -93,11 +103,21 @@ class IntegerTest extends TestCase {
         $sanitizer->process(1, SS::integer()->between(1, 100));
         $sanitizer->process(-1, SS::integer()->between(-100, 100));
 
-        $this->expectException(\InvalidArgumentException::class);
-        $sanitizer->process(-1, SS::integer()->between(1, 100));
+        try {
+            $sanitizer->process(-1, SS::integer()->between(1, 100));
 
-        $this->expectException(\InvalidArgumentException::class);
-        $sanitizer->process(0, SS::integer()->between(100, -100));
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+        }
+
+        try {
+            $sanitizer->process(0, SS::integer()->between(100, -100));
+
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+        }
     }
 
     /**
@@ -109,18 +129,74 @@ class IntegerTest extends TestCase {
     public function testRuleEquals($input, $expected): void {
         $sanitizer = new Sanitizer();
 
-        $this->assertEquals($expected, $sanitizer->process($input, SS::integer()->equals($expected)));
+        $sanitizer->process($input, SS::integer()->equals($expected));
 
-        $this->expectException(\InvalidArgumentException::class);
-        $sanitizer->process(100, SS::integer()->equals(101));
+        try {
+            $sanitizer->process(100, SS::integer()->equals(101));
+
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+        }
     }
 
     public function testRuleNot(): void {
         $sanitizer = new Sanitizer();
 
-        $this->assertEquals(1, $sanitizer->process(1, SS::integer()->not(0)));
+        $sanitizer->process(1, SS::integer()->not(0));
 
-        $this->expectException(\InvalidArgumentException::class);
-        $sanitizer->process(1, $sanitizer->process(1, SS::integer()->not(1)));
+        try {
+            $sanitizer->process(1, $sanitizer->process(1, SS::integer()->not(1)));
+
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+        }
+    }
+
+    public function testRuleOneOf(): void {
+        $sanitizer = new Sanitizer();
+
+        $sanitizer->process(1, SS::integer()->oneOf([0, 1]));
+
+        try {
+            $sanitizer->process(-1, SS::integer()->oneOf([0, 1]));
+
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+        }
+
+        try {
+            $sanitizer->process(1, SS::integer()->oneOf([]));
+
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+            $this->assertEquals('Values for "oneOf" rule should not be an empty array.', $e->getMessage());
+        }
+    }
+
+    public function testRuleNotOneOf(): void {
+        $sanitizer = new Sanitizer();
+
+        $sanitizer->process(2, SS::integer()->notOneOf([0, 1]));
+
+        try {
+            $sanitizer->process(0, SS::integer()->notOneOf([0, 1]));
+
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+        }
+
+        try {
+            $sanitizer->process(0, SS::integer()->notOneOf([]));
+
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+            $this->assertEquals('Values for "notOneOf" rule should not be an empty array.', $e->getMessage());
+        }
     }
 }
