@@ -1,0 +1,16 @@
+language: php
+
+php:
+  - 7.1.9
+  - hhvm
+  -
+matrix:
+  allow_failures:
+    - php: hhvm
+  fast_finish: true
+
+before_install:
+  - composer self-update
+  - composer install --no-interaction --dev
+
+script: phpunit
