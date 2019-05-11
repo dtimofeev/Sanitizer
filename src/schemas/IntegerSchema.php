@@ -8,6 +8,7 @@ class IntegerSchema extends SanitizerSchema {
     private const RULE_MIN    = 'min';
     private const RULE_MAX    = 'max';
     private const RULE_EQUALS = 'equals';
+    private const RULE_NOT    = 'not';
 
     /**
      * @param mixed $input
@@ -31,6 +32,9 @@ class IntegerSchema extends SanitizerSchema {
                     break;
                 case self::RULE_EQUALS:
                     $this->processRuleEquals($rule['expected']);
+                    break;
+                case self::RULE_NOT:
+                    $this->processRuleNot($rule['unexpected']);
                     break;
                 default:
                     break;
@@ -104,6 +108,20 @@ class IntegerSchema extends SanitizerSchema {
     }
 
     /**
+     * @param int $unexpected
+     *
+     * @return IntegerSchema
+     */
+    public function not(int $unexpected): IntegerSchema {
+        $this->rules[] = [
+            'type'       => self::RULE_NOT,
+            'unexpected' => $unexpected,
+        ];
+
+        return $this;
+    }
+
+    /**
      * @param int $min
      */
     private function processRuleMin(int $min): void {
@@ -122,5 +140,12 @@ class IntegerSchema extends SanitizerSchema {
      */
     private function processRuleEquals(int $expected): void {
         if ($this->value !== $expected) throw new \InvalidArgumentException("Value does not equal expected $expected.");
+    }
+
+    /**
+     * @param int $unexpected
+     */
+    private function processRuleNot(int $unexpected): void {
+        if ($this->value === $unexpected) throw new \InvalidArgumentException("Value should not equal $unexpected.");
     }
 }

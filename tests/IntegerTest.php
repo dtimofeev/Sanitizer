@@ -114,4 +114,13 @@ class IntegerTest extends TestCase {
         $this->expectException(\InvalidArgumentException::class);
         $sanitizer->process(100, SS::integer()->equals(101));
     }
+
+    public function testRuleNot(): void {
+        $sanitizer = new Sanitizer();
+
+        $this->assertEquals(1, $sanitizer->process(1, SS::integer()->not(0)));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $sanitizer->process(1, $sanitizer->process(1, SS::integer()->not(1)));
+    }
 }
