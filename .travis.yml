@@ -9,8 +9,12 @@ matrix:
     - php: hhvm
   fast_finish: true
 
-before_install:
-  - composer self-update
-  - composer install --no-interaction --dev
+before_script:
+  - travis_retry composer self-update
+  - travis_retry composer install --no-interaction --prefer-source --dev
 
-script: phpunit --testdox
+script:
+  - vendor/bin/phpunit --coverage-clover=coverage.xml --testdox
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
