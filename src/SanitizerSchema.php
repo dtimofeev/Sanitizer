@@ -3,6 +3,7 @@
 namespace sanitizer;
 
 use sanitizer\schemas\BooleanSchema;
+use sanitizer\schemas\IntegerSchema;
 
 abstract class SanitizerSchema {
     /** @var mixed */
@@ -41,5 +42,12 @@ abstract class SanitizerSchema {
      */
     final public static function boolean(): BooleanSchema {
         return new BooleanSchema();
+    }
+
+    /**
+     * @return IntegerSchema
+     */
+    final public static function integer(): IntegerSchema {
+        return new IntegerSchema();
     }
 }
