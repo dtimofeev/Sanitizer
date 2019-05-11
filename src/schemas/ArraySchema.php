@@ -3,6 +3,7 @@
 namespace sanitizer\schemas;
 
 use sanitizer\Sanitizer;
+use sanitizer\SanitizerRuleException;
 use sanitizer\SanitizerSchema;
 
 class ArraySchema extends SanitizerSchema {
@@ -13,7 +14,7 @@ class ArraySchema extends SanitizerSchema {
 
     public function process($input): ?array {
         if (!isset($input) && $this->optional) return $this->default;
-        if (!\is_array($input)) throw new \InvalidArgumentException('Invalid array value.');
+        if (!\is_array($input)) throw new SanitizerRuleException('Invalid array value.');
 
         $this->value = $input;
         foreach ($this->rules as $rule) {
@@ -102,13 +103,13 @@ class ArraySchema extends SanitizerSchema {
 
     public function processRuleScalar(): void {
         if (array_values($this->value) !== $this->value) {
-            throw new \InvalidArgumentException('Array is not scalar.');
+            throw new SanitizerRuleException('Array is not scalar.');
         }
     }
 
     public function processRuleUnique(): void {
         if (\count(array_unique($this->value)) !== \count($this->value)) {
-            throw new \InvalidArgumentException('Values are not unique.');
+            throw new SanitizerRuleException('Values are not unique.');
         }
     }
 }

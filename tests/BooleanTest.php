@@ -4,6 +4,7 @@ namespace sanitizer\tests;
 
 use PHPUnit\Framework\TestCase;
 use sanitizer\Sanitizer;
+use sanitizer\SanitizerException;
 use sanitizer\SanitizerSchema;
 use sanitizer\SanitizerSchema as SS;
 use sanitizer\schemas\BooleanSchema;
@@ -17,48 +18,48 @@ class BooleanTest extends TestCase {
     }
 
     public function testValueTrue(): void {
-        $this->assertTrue((new Sanitizer())->process(true, SS::boolean()));
+        $this->assertTrue(Sanitizer::process(true, SS::boolean()));
     }
 
     public function testValueFalse(): void {
-        $this->assertFalse((new Sanitizer())->process(false, SS::boolean()));
+        $this->assertFalse(Sanitizer::process(false, SS::boolean()));
     }
 
     public function testValueTruthlyInteger(): void {
-        $this->assertTrue((new Sanitizer())->process(1, SS::boolean()));
+        $this->assertTrue(Sanitizer::process(1, SS::boolean()));
     }
 
     public function testValueFalsyInteger(): void {
-        $this->assertFalse((new Sanitizer())->process(0, SS::boolean()));
+        $this->assertFalse(Sanitizer::process(0, SS::boolean()));
     }
 
     public function testDefault(): void {
-        $this->assertNull((new Sanitizer())->process(null, SS::boolean()->optional()));
+        $this->assertNull(Sanitizer::process(null, SS::boolean()->optional()));
     }
 
     public function testDefaultExplicitTrue(): void {
-        $this->assertTrue((new Sanitizer())->process(null, SS::boolean()->optional(true)));
+        $this->assertTrue(Sanitizer::process(null, SS::boolean()->optional(true)));
     }
 
     public function testDefaultExplicitFalse(): void {
-        $this->assertFalse((new Sanitizer())->process(null, SS::boolean()->optional(false)));
+        $this->assertFalse(Sanitizer::process(null, SS::boolean()->optional(false)));
     }
 
     public function testInvalidValueString(): void {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(SanitizerException::class);
 
-        (new Sanitizer())->process('invalid', SS::boolean());
+        Sanitizer::process('invalid', SS::boolean());
     }
 
     public function testInvalidValueArrayEmpty(): void {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(SanitizerException::class);
 
-        (new Sanitizer())->process([], SS::boolean());
+        Sanitizer::process([], SS::boolean());
     }
 
     public function testInvalidValueArrayNotEmpty(): void {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(SanitizerException::class);
 
-        (new Sanitizer())->process(['key' => 'value'], SS::boolean());
+        Sanitizer::process(['key' => 'value'], SS::boolean());
     }
 }

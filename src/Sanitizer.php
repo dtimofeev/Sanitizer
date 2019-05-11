@@ -9,12 +9,13 @@ class Sanitizer {
      * @param string $field
      *
      * @return mixed
+     * @throws SanitizerException
      */
     public static function process($input, SanitizerSchema $schema, string $field = '$') {
         try {
             return $schema->process($input);
         } catch (\Exception $e) {
-            throw new \InvalidArgumentException("Validation for field $field has failed. " . $e->getMessage());
+            throw new SanitizerException($field, $e);
         }
     }
 }

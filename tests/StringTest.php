@@ -4,6 +4,8 @@ namespace sanitizer\tests;
 
 use PHPUnit\Framework\TestCase;
 use sanitizer\Sanitizer;
+use sanitizer\SanitizerException;
+use sanitizer\SanitizerRuleException;
 use sanitizer\SanitizerSchema;
 use sanitizer\SanitizerSchema as SS;
 use sanitizer\schemas\StringSchema;
@@ -47,7 +49,7 @@ class StringTest extends TestCase {
         try {
             Sanitizer::process('  test  ', SS::string()->trim(false, false));
         } catch (\Exception $e) {
-            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+            $this->assertInstanceOf(SanitizerRuleException::class, $e);
             $this->assertEquals('Trying to define string trim rule with both left & right disabled.', $e->getMessage());
         }
     }
@@ -60,7 +62,7 @@ class StringTest extends TestCase {
 
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+            $this->assertInstanceOf(SanitizerException::class, $e);
         }
 
         try {
@@ -68,7 +70,7 @@ class StringTest extends TestCase {
 
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+            $this->assertInstanceOf(SanitizerException::class, $e);
         }
     }
 
@@ -80,7 +82,7 @@ class StringTest extends TestCase {
 
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+            $this->assertInstanceOf(SanitizerException::class, $e);
         }
     }
 
@@ -92,7 +94,7 @@ class StringTest extends TestCase {
 
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+            $this->assertInstanceOf(SanitizerException::class, $e);
         }
     }
 
@@ -104,7 +106,7 @@ class StringTest extends TestCase {
 
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+            $this->assertInstanceOf(SanitizerException::class, $e);
         }
     }
 
@@ -116,7 +118,7 @@ class StringTest extends TestCase {
 
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+            $this->assertInstanceOf(SanitizerException::class, $e);
         }
     }
 
@@ -128,7 +130,7 @@ class StringTest extends TestCase {
 
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+            $this->assertInstanceOf(SanitizerException::class, $e);
         }
 
         try {
@@ -136,7 +138,7 @@ class StringTest extends TestCase {
 
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+            $this->assertInstanceOf(SanitizerException::class, $e);
         }
     }
 
@@ -151,7 +153,7 @@ class StringTest extends TestCase {
 
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+            $this->assertInstanceOf(SanitizerException::class, $e);
         }
 
         try {
@@ -159,7 +161,7 @@ class StringTest extends TestCase {
 
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+            $this->assertInstanceOf(SanitizerException::class, $e);
         }
     }
 
@@ -174,7 +176,7 @@ class StringTest extends TestCase {
 
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+            $this->assertInstanceOf(SanitizerException::class, $e);
         }
     }
 
@@ -197,7 +199,7 @@ class StringTest extends TestCase {
 
                 $this->fail();
             } catch (\Exception $e) {
-                $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+                $this->assertInstanceOf(SanitizerException::class, $e);
             }
         }
     }
@@ -222,7 +224,7 @@ class StringTest extends TestCase {
 
                 $this->fail();
             } catch (\Exception $e) {
-                $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+                $this->assertInstanceOf(SanitizerException::class, $e);
             }
         }
     }

@@ -2,6 +2,7 @@
 
 namespace sanitizer\schemas;
 
+use sanitizer\SanitizerRuleException;
 use sanitizer\SanitizerSchema;
 
 class StringSchema extends SanitizerSchema {
@@ -23,7 +24,7 @@ class StringSchema extends SanitizerSchema {
         if (!isset($input) && $this->optional) return $this->default;
 
         $this->value = filter_var($input, FILTER_SANITIZE_STRING);
-        if (!\is_string($this->value)) throw new \InvalidArgumentException('Invalid string value.');
+        if (!\is_string($this->value)) throw new SanitizerRuleException('Invalid string value.');
 
         foreach ($this->rules as $rule) {
             switch ($rule['type']) {
@@ -67,7 +68,7 @@ class StringSchema extends SanitizerSchema {
      */
     public function trim(bool $left = true, bool $right = true): StringSchema {
         if (!$left && !$right) {
-            throw new \InvalidArgumentException('Trying to define string trim rule with both left & right disabled.');
+            throw new SanitizerRuleException('Trying to define string trim rule with both left & right disabled.');
         }
 
         $this->rules[] = [
@@ -138,7 +139,7 @@ class StringSchema extends SanitizerSchema {
         if (!\in_array($this->value, $values, $strict)) {
             $valuesString = implode('|', $values);
 
-            throw new \InvalidArgumentException("Value should be one of ($valuesString)");
+            throw new SanitizerRuleException("Value should be one of ($valuesString)");
         }
     }
 
@@ -150,7 +151,7 @@ class StringSchema extends SanitizerSchema {
         if (\in_array($this->value, $values, $strict)) {
             $valuesString = implode('|', $values);
 
-            throw new \InvalidArgumentException("Value should not be one of ($valuesString)");
+            throw new SanitizerRuleException("Value should not be one of ($valuesString)");
         }
     }
 
@@ -288,13 +289,13 @@ class StringSchema extends SanitizerSchema {
      */
     private function processRuleLength(?int $min, ?int $max, string $charset): void {
         $length = mb_strlen($this->value, $charset);
-        if ($min !== null && $length < $min) throw new \InvalidArgumentException("String length is below expected minimum of $min characters.");
-        if ($max !== null && $length > $max) throw new \InvalidArgumentException("String length is above expected maximum of $max characters.");
+        if ($min !== null && $length < $min) throw new SanitizerRuleException("String length is below expected minimum of $min characters.");
+        if ($max !== null && $length > $max) throw new SanitizerRuleException("String length is above expected maximum of $max characters.");
     }
 
     private function processRuleEmail(): void {
         if (!filter_var($this->value, FILTER_VALIDATE_EMAIL)) {
-            throw new \InvalidArgumentException('Not a valid email.');
+            throw new SanitizerRuleException('Not a valid email.');
         }
     }
 
@@ -308,7 +309,7 @@ class StringSchema extends SanitizerSchema {
         if ($v6) $flags |= FILTER_FLAG_IPV6;
 
         if (!filter_var($this->value, FILTER_VALIDATE_IP, $flags)) {
-            throw new \InvalidArgumentException('Not a valid IP address.');
+            throw new SanitizerRuleException('Not a valid IP address.');
         }
     }
 
@@ -317,11 +318,11 @@ class StringSchema extends SanitizerSchema {
      */
     private function processRuleURL(bool $onlyHttps): void {
         $filtered = filter_var($this->value, FILTER_VALIDATE_URL);
-        if (!$filtered) throw new \InvalidArgumentException('Not a valid URL.');
+        if (!$filtered) throw new SanitizerRuleException('Not a valid URL.');
 
         if ($onlyHttps) {
             $parsed = parse_url($filtered);
-            if ($parsed['scheme'] !== 'https') throw new \InvalidArgumentException('URL is not HTTPS.');
+            if ($parsed['scheme'] !== 'https') throw new SanitizerRuleException('URL is not HTTPS.');
         }
     }
 
@@ -334,7 +335,7 @@ class StringSchema extends SanitizerSchema {
             'options' => ['regexp' => '/^' . $pattern . '$/'],
         ];
         if (filter_var($this->value, FILTER_VALIDATE_REGEXP, $options) === false) {
-            throw new \InvalidArgumentException('Provided string does not match the ' . ($name ?? $pattern) . ' pattern.');
+            throw new SanitizerRuleException('Provided string does not match the ' . ($name ?? $pattern) . ' pattern.');
         }
     }
 }

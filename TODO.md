@@ -52,4 +52,3 @@ If multiple elements have the same validation an alias may be used to define the
 
 ### TODOS
 * fix optional if not at end
-* improve nested errors

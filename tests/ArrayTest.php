@@ -4,6 +4,7 @@ namespace sanitizer\tests;
 
 use PHPUnit\Framework\TestCase;
 use sanitizer\Sanitizer;
+use sanitizer\SanitizerException;
 use sanitizer\SanitizerSchema;
 use sanitizer\SanitizerSchema as SS;
 use sanitizer\schemas\ArraySchema;
@@ -29,7 +30,7 @@ class ArrayTest extends TestCase {
 
                 $this->fail();
             } catch (\Exception $e) {
-                $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+                $this->assertInstanceOf(SanitizerException::class, $e);
             }
         }
     }
@@ -49,7 +50,7 @@ class ArrayTest extends TestCase {
 
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+            $this->assertInstanceOf(SanitizerException::class, $e);
         }
     }
 
@@ -74,7 +75,7 @@ class ArrayTest extends TestCase {
 
                 $this->fail();
             } catch (\Exception $e) {
-                $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+                $this->assertInstanceOf(SanitizerException::class, $e);
             }
         }
     }

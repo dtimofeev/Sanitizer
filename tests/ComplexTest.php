@@ -42,4 +42,27 @@ class ComplexTest extends TestCase {
             'sex' => 'na'
         ]), $processed);
     }
+
+    public function testErrorPath(): void {
+        $input = [
+            'favMovies' => [
+                ['title' => 'Doctor Strange', 'tags' => ['marvel ', 'magic']],
+            ],
+        ];
+
+        try {
+            $processed = Sanitizer::process($input, SS::arr()->schema([
+                'favMovies' => SS::arr()->each(
+                    SS::arr()->schema([
+                        'title' => SS::string()->trim()->max(200),
+                        'tags'  => SS::arr()->unique()->each(
+                            SS::string()->alphaNum()
+                        ),
+                    ])
+                ),
+            ]));
+        } catch (\Exception $e) {
+            $this->assertContains('$.favMovies.0.tags.0', $e->getMessage());
+        }
+    }
 }
