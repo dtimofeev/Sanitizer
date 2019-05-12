@@ -16,8 +16,8 @@ class ComplexTest extends TestCase {
             'email'     => 'user@mailprovider.org',
             'ip'        => '127.0.0.1',
             'favMovies' => [
-                ['title' => 'Doctor Strange', 'tags' => ['marvel', 'magic']],
-                ['title' => 'Star Wars', 'tags' => ['space']],
+                ['title' => 'Doctor Strange', 'release' => '2019-01-01', 'tags' => ['marvel', 'magic']],
+                ['title' => 'Star Wars', 'release' => '1998-05-23', 'tags' => ['space']],
             ],
         ];
 
@@ -29,9 +29,9 @@ class ComplexTest extends TestCase {
             'sex'       => SS::string()->oneOf(['male', 'female', 'na'])->optional('na'),
             'favMovies' => SS::arr()->each(
                 SS::arr()->schema([
-                    'title' => SS::string()->trim()->max(200),
-                    // 'release' => SS::date()->format('Y-m-d H:i:s'),
-                    'tags'  => SS::arr()->unique()->each(
+                    'title'   => SS::string()->trim()->max(200),
+                    'release' => SS::date('Y-m-d'),
+                    'tags'    => SS::arr()->unique()->each(
                         SS::string()->alphaNum()
                     ),
                 ])
@@ -39,7 +39,7 @@ class ComplexTest extends TestCase {
         ]));
 
         $this->assertEquals(array_merge($input, [
-            'sex' => 'na'
+            'sex' => 'na',
         ]), $processed);
     }
 
@@ -62,7 +62,8 @@ class ComplexTest extends TestCase {
                 ),
             ]));
         } catch (\Exception $e) {
-            $this->assertEquals('Validation for field $.favMovies.tags has failed. Provided string does not match the alphaNum pattern.', $e->getMessage());
+            $this->assertEquals('Validation for field $.favMovies.tags has failed. Provided string does not match the alphaNum pattern.',
+                $e->getMessage());
         }
     }
 }
