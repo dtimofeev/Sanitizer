@@ -1,5 +1,5 @@
 # About
-Simple data sanitation library for PHP 7.1+ without any external library dependencies.
+Simple data sanitization library for PHP 7.1+ without any external library dependencies.
 
 [![Build Status](https://travis-ci.org/dtimofeev/Sanitizer.svg?branch=master)](https://travis-ci.org/dtimofeev/Sanitizer)
 [![codecov](https://codecov.io/gh/dtimofeev/Sanitizer/branch/master/graph/badge.svg)](https://codecov.io/gh/dtimofeev/Sanitizer)
@@ -33,7 +33,7 @@ $processed = Sanitizer::process($input, SS::arr()->schema([
 
 # Aliases
 
-Aliases allow for a single definition of commonly used sanitation rules. They can be defined via `SS::createAlias(string $name, SanitizerSchema  $schema)` and used as normal schema rules `SS::alias($name)` everywhere, no matter the depth. Because of the schemas nature these are also more memory efficient than defining a separate schemas.  
+Aliases allow for a single definition of commonly used sanitization rules. They can be defined via `SS::createAlias(string $name, SanitizerSchema  $schema)` and used as normal schema rules `SS::alias($name)` everywhere, no matter the depth. Because of the schemas nature these are also more memory efficient than defining a separate schemas.  
 
 ##### Example:
 ```php
