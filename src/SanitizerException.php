@@ -88,13 +88,13 @@ class SanitizerException extends \Exception {
             $this->chain = $previous->getChain();
         }
 
-        if ($field) $this->chain[] = $field;
+        if (isset($field)) $this->chain[] = $field;
         $this->params = $params;
 
         $message = '';
         if ($this->chain) {
             $message = self::$baseMessage . ' ';
-            $this->params['path'] = implode('.', array_reverse($this->chain));
+            $this->params['path'] = $this->getFieldPath();
         }
         $message .= self::$messages[$code] ?? 'Unknown error type.';
 
@@ -120,5 +120,22 @@ class SanitizerException extends \Exception {
      */
     public function getParams(): array {
         return $this->params ?? [];
+    }
+
+    /**
+     * @param bool $maskIntKeys
+     * @param string $mask
+     *
+     * @return string
+     */
+    public function getFieldPath(bool $maskIntKeys = false, string $mask = '*'): string {
+        $chain = $this->chain;
+        if ($maskIntKeys) {
+            foreach ($chain as &$field) {
+                if (\is_numeric($field)) $field = $mask;
+            }
+        }
+
+        return implode('.', array_reverse($chain));
     }
 }

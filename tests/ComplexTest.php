@@ -62,9 +62,14 @@ class ComplexTest extends TestCase {
                     ])
                 ),
             ]));
-        } catch (\Exception $e) {
-            $this->assertEquals('Validation for field $.favMovies.tags has failed. Provided string does not match the alphaNum pattern.',
-                $e->getMessage());
+
+            $this->fail();
+        } catch (SanitizerException $e) {
+            $expectedError = 'Validation for field $.favMovies.0.tags.0 has failed. Provided string does not match the alphaNum pattern.';
+            $this->assertEquals($expectedError, $e->getMessage());
+            $this->assertEquals('$.favMovies.0.tags.0', $e->getFieldPath());
+            $this->assertEquals('$.favMovies.*.tags.*', $e->getFieldPath(true));
+            $this->assertEquals('$.favMovies.z.tags.z', $e->getFieldPath(true, 'z'));
         }
     }
 
