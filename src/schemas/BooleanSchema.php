@@ -15,7 +15,7 @@ class BooleanSchema extends SanitizerSchema {
         if (!isset($input) && $this->optional) return $this->default;
 
         $this->value = filter_var($input, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-        if ($this->value === null) throw new SanitizerException('Expected boolean value.');
+        if ($this->value === null) throw new SanitizerException(SanitizerException::ERR_BOOL_INVALID);
 
         return $this->value;
     }

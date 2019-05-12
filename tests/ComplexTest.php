@@ -4,6 +4,7 @@ namespace sanitizer\tests;
 
 use PHPUnit\Framework\TestCase;
 use sanitizer\Sanitizer;
+use sanitizer\SanitizerException;
 use sanitizer\SanitizerSchema;
 use sanitizer\SanitizerSchema as SS;
 use sanitizer\schemas\BooleanSchema;
@@ -120,6 +121,16 @@ class ComplexTest extends TestCase {
         } catch (\Exception $e) {
             $this->assertInstanceOf(\InvalidArgumentException::class, $e);
             $this->assertEquals('Undefined alias with name missingSchema.', $e->getMessage());
+        }
+    }
+
+    public function testCustomErrorMessages(): void {
+        SanitizerException::$messages[SanitizerException::ERR_INT_EQUALS] .= '__MODIFIED__';
+
+        try {
+            Sanitizer::process(0, SS::integer()->equals(1));
+        } catch (\Exception $e) {
+            $this->assertContains('__MODIFIED__', $e->getMessage());
         }
     }
 }

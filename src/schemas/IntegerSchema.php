@@ -20,10 +20,10 @@ class IntegerSchema extends SanitizerSchema {
      */
     public function process($input): ?int {
         if (!isset($input) && $this->optional) return $this->default;
-        if (!\is_numeric($input)) throw new SanitizerException('Invalid integer value.');
+        if (!\is_numeric($input)) throw new SanitizerException(SanitizerException::ERR_INT_INVALID);
 
         $this->value = filter_var($input, FILTER_VALIDATE_INT);
-        if ($this->value === false) throw new SanitizerException('Invalid integer value.');
+        if ($this->value === false) throw new SanitizerException(SanitizerException::ERR_INT_INVALID);
 
         foreach ($this->rules as $rule) {
             switch ($rule['type']) {
@@ -186,28 +186,32 @@ class IntegerSchema extends SanitizerSchema {
      * @param int $min
      */
     private function processRuleMin(int $min): void {
-        if ($this->value < $min) throw new SanitizerException('Value is less than expected minimum of ' . $min);
+        if ($this->value < $min) throw new SanitizerException(SanitizerException::ERR_INT_MIN, ['value' => $min]);
     }
 
     /**
      * @param int $min
      */
     private function processRuleMax(int $min): void {
-        if ($this->value > $min) throw new SanitizerException('Value is more than expected maximum of ' . $min);
+        if ($this->value > $min) throw new SanitizerException(SanitizerException::ERR_INT_MAX, ['value' => $min]);
     }
 
     /**
      * @param int $expected
      */
     private function processRuleEquals(int $expected): void {
-        if ($this->value !== $expected) throw new SanitizerException("Value does not equal expected $expected.");
+        if ($this->value !== $expected) {
+            throw new SanitizerException(SanitizerException::ERR_INT_EQUALS, ['value' => $expected]);
+        }
     }
 
     /**
      * @param int $unexpected
      */
     private function processRuleNot(int $unexpected): void {
-        if ($this->value === $unexpected) throw new SanitizerException("Value should not equal $unexpected.");
+        if ($this->value === $unexpected) {
+            throw new SanitizerException(SanitizerException::ERR_INT_NOT_EQUALS, ['value' => $unexpected]);
+        }
     }
 
     /**
@@ -215,9 +219,7 @@ class IntegerSchema extends SanitizerSchema {
      */
     private function processRuleOneOf(array $values): void {
         if (!\in_array($this->value, $values, true)) {
-            $valuesString = implode('|', $values);
-
-            throw new SanitizerException("Value should be one of ($valuesString).");
+            throw new SanitizerException(SanitizerException::ERR_INT_ONE_OF , ['values' => $values]);
         }
     }
 
@@ -226,9 +228,7 @@ class IntegerSchema extends SanitizerSchema {
      */
     private function processRuleNotOneOf(array $values): void {
         if (\in_array($this->value, $values, true)) {
-            $valuesString = implode('|', $values);
-
-            throw new SanitizerException("Value should not be one of ($valuesString).");
+            throw new SanitizerException(SanitizerException::ERR_INT_NOT_ONE_OF, ['values' => $values]);
         }
     }
 }

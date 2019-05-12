@@ -101,3 +101,6 @@ $processed = Sanitizer::process($input, SS::arr()->schema([
 | `unique`   | - | Checks if all values of the validated array are unique.
 | `each`     | `SanitizerSchema $schema` | Checks if each of the values of the validated array satisfy the specified `$schema`
 | `schema`   | `array $schema` | Validates every key => value based on provided schema.
+
+# Custom error messages
+Error messages are defined inside a static map `SanitizerException::$messages` and can be easily redefined. This can be used for multilingual messages for example.

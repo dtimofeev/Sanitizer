@@ -31,6 +31,7 @@ class ArrayTest extends TestCase {
                 $this->fail();
             } catch (\Exception $e) {
                 $this->assertInstanceOf(SanitizerException::class, $e);
+                $this->assertEquals(SanitizerException::ERR_ARR_INVALID, $e->getCode());
             }
         }
     }
@@ -74,6 +75,7 @@ class ArrayTest extends TestCase {
             $this->fail();
         } catch (\Exception $e) {
             $this->assertInstanceOf(SanitizerException::class, $e);
+            $this->assertEquals(SanitizerException::ERR_ARR_SCALAR, $e->getCode());
         }
     }
 
@@ -99,6 +101,7 @@ class ArrayTest extends TestCase {
                 $this->fail();
             } catch (\Exception $e) {
                 $this->assertInstanceOf(SanitizerException::class, $e);
+                $this->assertEquals(SanitizerException::ERR_ARR_UNIQUE, $e->getCode());
             }
         }
     }

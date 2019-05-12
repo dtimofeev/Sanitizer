@@ -29,11 +29,11 @@ class DateSchema extends SanitizerSchema {
      */
     public function process($input): string {
         if (!isset($input) && $this->optional) return $this->default;
-        if (!is_scalar($input)) throw new SanitizerException('Not a valid date.');
+        if (!is_scalar($input)) throw new SanitizerException(SanitizerException::ERR_DATE_INVALID);
 
         $this->value = \DateTime::createFromFormat($this->format, $input);
         if (!$this->value || $this->value->format($this->format) !== $input) {
-            throw new SanitizerException('Not a valid date.');
+            throw new SanitizerException(SanitizerException::ERR_DATE_INVALID);
         }
 
         foreach ($this->rules as $rule) {
@@ -108,15 +108,17 @@ class DateSchema extends SanitizerSchema {
      * @param string $date
      */
     private function processRuleBefore(string $date): void {
-        $beforeDate = (new \DateTime($date));
-        if ($this->value >= $beforeDate) throw new SanitizerException("Date should be before $date.");
+        if ($this->value >= new \DateTime($date)) {
+            throw new SanitizerException(SanitizerException::ERR_DATE_BEFORE, ['date' => $date]);
+        }
     }
 
     /**
      * @param string $date
      */
     private function processRuleAfter(string $date): void {
-        $afterDate = new \DateTime($date);
-        if ($this->value <= $afterDate) throw new SanitizerException("Date should be after $date.");
+        if ($this->value <= new \DateTime($date)) {
+            throw new SanitizerException(SanitizerException::ERR_DATE_AFTER, ['date' => $date]);
+        }
     }
 }

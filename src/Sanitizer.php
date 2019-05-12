@@ -15,7 +15,7 @@ class Sanitizer {
         try {
             return $schema->process($input);
         } catch (SanitizerException $e) {
-            throw new SanitizerException($e->getMessage(), $field, $e);
+            throw new SanitizerException($e->getCode(), $e->getParams(), $field, $e);
         }
     }
 }

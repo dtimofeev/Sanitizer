@@ -62,6 +62,7 @@ class StringTest extends TestCase {
             $this->fail();
         } catch (\Exception $e) {
             $this->assertInstanceOf(SanitizerException::class, $e);
+            $this->assertEquals(SanitizerException::ERR_STR_MIN, $e->getCode());
         }
 
         try {
@@ -70,6 +71,7 @@ class StringTest extends TestCase {
             $this->fail();
         } catch (\Exception $e) {
             $this->assertInstanceOf(SanitizerException::class, $e);
+            $this->assertEquals(SanitizerException::ERR_STR_MAX, $e->getCode());
         }
     }
 
@@ -82,6 +84,8 @@ class StringTest extends TestCase {
             $this->fail();
         } catch (\Exception $e) {
             $this->assertInstanceOf(SanitizerException::class, $e);
+            $this->assertEquals(SanitizerException::ERR_STR_MIN, $e->getCode());
+            $this->assertContains('5', $e->getMessage());
         }
     }
 
@@ -94,6 +98,8 @@ class StringTest extends TestCase {
             $this->fail();
         } catch (\Exception $e) {
             $this->assertInstanceOf(SanitizerException::class, $e);
+            $this->assertEquals(SanitizerException::ERR_STR_MAX, $e->getCode());
+            $this->assertContains('3', $e->getMessage());
         }
     }
 
@@ -106,6 +112,8 @@ class StringTest extends TestCase {
             $this->fail();
         } catch (\Exception $e) {
             $this->assertInstanceOf(SanitizerException::class, $e);
+            $this->assertEquals(SanitizerException::ERR_STR_ONE_OF, $e->getCode());
+            $this->assertContains(implode('|', ['success', 'error']), $e->getMessage());
         }
     }
 
@@ -118,6 +126,8 @@ class StringTest extends TestCase {
             $this->fail();
         } catch (\Exception $e) {
             $this->assertInstanceOf(SanitizerException::class, $e);
+            $this->assertEquals(SanitizerException::ERR_STR_NOT_ONE_OF, $e->getCode());
+            $this->assertContains(implode('|', ['success', 'error']), $e->getMessage());
         }
     }
 
@@ -130,6 +140,7 @@ class StringTest extends TestCase {
             $this->fail();
         } catch (\Exception $e) {
             $this->assertInstanceOf(SanitizerException::class, $e);
+            $this->assertEquals(SanitizerException::ERR_STR_EMAIL, $e->getCode());
         }
 
         try {
@@ -138,6 +149,7 @@ class StringTest extends TestCase {
             $this->fail();
         } catch (\Exception $e) {
             $this->assertInstanceOf(SanitizerException::class, $e);
+            $this->assertEquals(SanitizerException::ERR_STR_EMAIL, $e->getCode());
         }
     }
 
@@ -153,6 +165,7 @@ class StringTest extends TestCase {
             $this->fail();
         } catch (\Exception $e) {
             $this->assertInstanceOf(SanitizerException::class, $e);
+            $this->assertEquals(SanitizerException::ERR_STR_IP, $e->getCode());
         }
 
         try {
@@ -161,6 +174,7 @@ class StringTest extends TestCase {
             $this->fail();
         } catch (\Exception $e) {
             $this->assertInstanceOf(SanitizerException::class, $e);
+            $this->assertEquals(SanitizerException::ERR_STR_IP, $e->getCode());
         }
     }
 
@@ -176,6 +190,7 @@ class StringTest extends TestCase {
             $this->fail();
         } catch (\Exception $e) {
             $this->assertInstanceOf(SanitizerException::class, $e);
+            $this->assertEquals(SanitizerException::ERR_STR_URL_NOT_HTTPS, $e->getCode());
         }
     }
 
@@ -199,6 +214,7 @@ class StringTest extends TestCase {
                 $this->fail();
             } catch (\Exception $e) {
                 $this->assertInstanceOf(SanitizerException::class, $e);
+                $this->assertEquals(SanitizerException::ERR_STR_REGEX, $e->getCode());
             }
         }
     }
@@ -224,6 +240,8 @@ class StringTest extends TestCase {
                 $this->fail();
             } catch (\Exception $e) {
                 $this->assertInstanceOf(SanitizerException::class, $e);
+                $this->assertEquals(SanitizerException::ERR_STR_REGEX, $e->getCode());
+                $this->assertContains('alphaNum', $e->getMessage());
             }
         }
     }

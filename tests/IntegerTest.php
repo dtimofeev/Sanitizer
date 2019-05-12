@@ -48,6 +48,7 @@ class IntegerTest extends TestCase {
      */
     public function testInvalidCases($input): void {
         $this->expectException(SanitizerException::class);
+        $this->expectExceptionCode(SanitizerException::ERR_INT_INVALID);
         Sanitizer::process($input, SS::integer());
     }
 
@@ -75,6 +76,8 @@ class IntegerTest extends TestCase {
             $this->fail();
         } catch (\Exception $e) {
             $this->assertInstanceOf(SanitizerException::class, $e);
+            $this->assertEquals(SanitizerException::ERR_INT_MIN, $e->getCode());
+            $this->assertContains('1', $e->getMessage());
         }
     }
 
@@ -87,6 +90,8 @@ class IntegerTest extends TestCase {
             $this->fail();
         } catch (\Exception $e) {
             $this->assertInstanceOf(SanitizerException::class, $e);
+            $this->assertEquals(SanitizerException::ERR_INT_MAX, $e->getCode());
+            $this->assertContains('1', $e->getMessage());
         }
     }
 
@@ -100,6 +105,7 @@ class IntegerTest extends TestCase {
             $this->fail();
         } catch (\Exception $e) {
             $this->assertInstanceOf(SanitizerException::class, $e);
+            $this->assertEquals(SanitizerException::ERR_INT_MIN, $e->getCode());
         }
 
         try {
@@ -126,6 +132,8 @@ class IntegerTest extends TestCase {
             $this->fail();
         } catch (\Exception $e) {
             $this->assertInstanceOf(SanitizerException::class, $e);
+            $this->assertEquals(SanitizerException::ERR_INT_EQUALS, $e->getCode());
+            $this->assertContains('101', $e->getMessage());
         }
     }
 
@@ -138,6 +146,8 @@ class IntegerTest extends TestCase {
             $this->fail();
         } catch (\Exception $e) {
             $this->assertInstanceOf(SanitizerException::class, $e);
+            $this->assertEquals(SanitizerException::ERR_INT_NOT_EQUALS, $e->getCode());
+            $this->assertContains('1', $e->getMessage());
         }
     }
 
@@ -150,6 +160,8 @@ class IntegerTest extends TestCase {
             $this->fail();
         } catch (\Exception $e) {
             $this->assertInstanceOf(SanitizerException::class, $e);
+            $this->assertEquals(SanitizerException::ERR_INT_ONE_OF, $e->getCode());
+            $this->assertContains(implode('|', [0, 1]), $e->getMessage());
         }
 
         try {
@@ -171,6 +183,8 @@ class IntegerTest extends TestCase {
             $this->fail();
         } catch (\Exception $e) {
             $this->assertInstanceOf(SanitizerException::class, $e);
+            $this->assertEquals(SanitizerException::ERR_INT_NOT_ONE_OF, $e->getCode());
+            $this->assertContains(implode('|', [0, 1]), $e->getMessage());
         }
 
         try {

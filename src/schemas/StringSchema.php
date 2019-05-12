@@ -24,7 +24,7 @@ class StringSchema extends SanitizerSchema {
         if (!isset($input) && $this->optional) return $this->default;
 
         $this->value = filter_var($input, FILTER_SANITIZE_STRING);
-        if (!\is_string($this->value)) throw new SanitizerException('Invalid string value.');
+        if (!\is_string($this->value)) throw new SanitizerException(SanitizerException::ERR_STR_INVALID);
 
         foreach ($this->rules as $rule) {
             switch ($rule['type']) {
@@ -281,8 +281,12 @@ class StringSchema extends SanitizerSchema {
      */
     private function processRuleLength(?int $min, ?int $max, string $charset): void {
         $length = mb_strlen($this->value, $charset);
-        if ($min !== null && $length < $min) throw new SanitizerException("String length is below expected minimum of $min characters.");
-        if ($max !== null && $length > $max) throw new SanitizerException("String length is above expected maximum of $max characters.");
+        if ($min !== null && $length < $min) {
+            throw new SanitizerException(SanitizerException::ERR_STR_MIN, ['min' => $min]);
+        }
+        if ($max !== null && $length > $max) {
+            throw new SanitizerException(SanitizerException::ERR_STR_MAX, ['max' => $max]);
+        }
     }
 
     /**
@@ -291,9 +295,7 @@ class StringSchema extends SanitizerSchema {
      */
     private function processRuleOneOf(array $values, bool $strict): void {
         if (!\in_array($this->value, $values, $strict)) {
-            $valuesString = implode('|', $values);
-
-            throw new SanitizerException("Value should be one of ($valuesString)");
+            throw new SanitizerException(SanitizerException::ERR_STR_ONE_OF, ['values' => $values]);
         }
     }
 
@@ -303,15 +305,13 @@ class StringSchema extends SanitizerSchema {
      */
     private function processRuleNotOneOf(array $values, bool $strict): void {
         if (\in_array($this->value, $values, $strict)) {
-            $valuesString = implode('|', $values);
-
-            throw new SanitizerException("Value should not be one of ($valuesString)");
+            throw new SanitizerException(SanitizerException::ERR_STR_NOT_ONE_OF, ['values' => $values]);
         }
     }
 
     private function processRuleEmail(): void {
         if (!filter_var($this->value, FILTER_VALIDATE_EMAIL)) {
-            throw new SanitizerException('Not a valid email.');
+            throw new SanitizerException(SanitizerException::ERR_STR_EMAIL);
         }
     }
 
@@ -325,7 +325,7 @@ class StringSchema extends SanitizerSchema {
         if ($v6) $flags |= FILTER_FLAG_IPV6;
 
         if (!filter_var($this->value, FILTER_VALIDATE_IP, $flags)) {
-            throw new SanitizerException('Not a valid IP address.');
+            throw new SanitizerException(SanitizerException::ERR_STR_IP);
         }
     }
 
@@ -334,11 +334,11 @@ class StringSchema extends SanitizerSchema {
      */
     private function processRuleURL(bool $onlyHttps): void {
         $filtered = filter_var($this->value, FILTER_VALIDATE_URL);
-        if (!$filtered) throw new SanitizerException('Not a valid URL.');
+        if (!$filtered) throw new SanitizerException(SanitizerException::ERR_STR_URL);
 
         if ($onlyHttps) {
             $parsed = parse_url($filtered);
-            if ($parsed['scheme'] !== 'https') throw new SanitizerException('URL is not HTTPS.');
+            if ($parsed['scheme'] !== 'https') throw new SanitizerException(SanitizerException::ERR_STR_URL_NOT_HTTPS);
         }
     }
 
@@ -351,7 +351,7 @@ class StringSchema extends SanitizerSchema {
             'options' => ['regexp' => '/^' . $pattern . '$/'],
         ];
         if (filter_var($this->value, FILTER_VALIDATE_REGEXP, $options) === false) {
-            throw new SanitizerException('Provided string does not match the ' . ($name ?? $pattern) . ' pattern.');
+            throw new SanitizerException(SanitizerException::ERR_STR_REGEX, ['pattern' => $name ?? $pattern]);
         }
     }
 }

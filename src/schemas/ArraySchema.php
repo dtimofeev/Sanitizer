@@ -20,7 +20,7 @@ class ArraySchema extends SanitizerSchema {
      */
     public function process($input): ?array {
         if ((!isset($input) || empty($input)) && $this->optional) return $this->default;
-        if (!\is_array($input)) throw new SanitizerException('Invalid array value.');
+        if (!\is_array($input)) throw new SanitizerException(SanitizerException::ERR_ARR_INVALID);
 
         $this->value = $input;
         foreach ($this->rules as $rule) {
@@ -125,13 +125,13 @@ class ArraySchema extends SanitizerSchema {
 
     private function processRuleScalar(): void {
         if (array_values($this->value) !== $this->value) {
-            throw new SanitizerException('Array is not scalar.');
+            throw new SanitizerException(SanitizerException::ERR_ARR_SCALAR);
         }
     }
 
     private function processRuleUnique(): void {
         if (\count(array_unique($this->value)) !== \count($this->value)) {
-            throw new SanitizerException('Values are not unique.');
+            throw new SanitizerException(SanitizerException::ERR_ARR_UNIQUE);
         }
     }
 }

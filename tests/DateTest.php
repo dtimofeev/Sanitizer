@@ -42,6 +42,7 @@ class DateTest extends TestCase {
                 $this->fail();
             } catch (\Exception $e) {
                 $this->assertInstanceOf(SanitizerException::class, $e);
+                $this->assertEquals(SanitizerException::ERR_DATE_INVALID, $e->getCode());
             }
         }
     }
@@ -82,6 +83,8 @@ class DateTest extends TestCase {
                 $this->fail();
             } catch (\Exception $e) {
                 $this->assertInstanceOf(SanitizerException::class, $e);
+                $this->assertEquals(SanitizerException::ERR_DATE_BEFORE, $e->getCode());
+                $this->assertContains($invalidBefore, $e->getMessage());
             }
         }
     }
@@ -95,13 +98,15 @@ class DateTest extends TestCase {
         foreach ([
             '2019-01-01 10:00:02',
             '2019-01-01 10:00:03'
-        ] as $invalidBefore) {
+        ] as $invalidAfter) {
             try {
-                Sanitizer::process($input, SS::date('Y-m-d H:i:s')->after($invalidBefore));
+                Sanitizer::process($input, SS::date('Y-m-d H:i:s')->after($invalidAfter));
 
                 $this->fail();
             } catch (\Exception $e) {
                 $this->assertInstanceOf(SanitizerException::class, $e);
+                $this->assertEquals(SanitizerException::ERR_DATE_AFTER, $e->getCode());
+                $this->assertContains($invalidAfter, $e->getMessage());
             }
         }
     }
