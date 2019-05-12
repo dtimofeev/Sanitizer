@@ -132,4 +132,32 @@ class ArrayTest extends TestCase {
             'logged'   => SS::boolean(),
         ])));
     }
+
+    public function testRuleMin(): void {
+        $input = ['key' => 'value', 'key2' => 'value2'];
+        $this->assertEquals($input, Sanitizer::process($input, SS::arr()->min(1)));
+
+        try {
+            Sanitizer::process($input, SS::arr()->min(3));
+
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(SanitizerException::class, $e);
+            $this->assertEquals(SanitizerException::ERR_ARR_MIN, $e->getCode());
+        }
+    }
+
+    public function testRuleMax(): void {
+        $input = ['key' => 'value', 'key2' => 'value2'];
+        $this->assertEquals($input, Sanitizer::process($input, SS::arr()->max(3)));
+
+        try {
+            Sanitizer::process($input, SS::arr()->max(1));
+
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(SanitizerException::class, $e);
+            $this->assertEquals(SanitizerException::ERR_ARR_MAX, $e->getCode());
+        }
+    }
 }

@@ -11,6 +11,8 @@ class ArraySchema extends SanitizerSchema {
     private const RULE_SCALAR  = 'scalar';
     private const RULE_UNIQUE  = 'unique';
     private const RULE_EACH    = 'each';
+    private const RULE_MIN     = 'min';
+    private const RULE_MAX     = 'max';
 
     /**
      * @param mixed $input
@@ -36,6 +38,12 @@ class ArraySchema extends SanitizerSchema {
                     break;
                 case self::RULE_EACH:
                     $this->processRuleEach($rule['schema']);
+                    break;
+                case self::RULE_MIN:
+                    $this->processRuleMin($rule['min']);
+                    break;
+                case self::RULE_MAX:
+                    $this->processRuleMax($rule['max']);
                     break;
                 default:
                     break;
@@ -111,6 +119,36 @@ class ArraySchema extends SanitizerSchema {
     }
 
     /**
+     * @param int $length
+     *
+     * @return ArraySchema
+     */
+    public function min(int $length): ArraySchema {
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
+            'type' => self::RULE_MIN,
+            'min'  => $length,
+        ];
+
+        return $self;
+    }
+
+    /**
+     * @param int $length
+     *
+     * @return ArraySchema
+     */
+    public function max(int $length): ArraySchema {
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
+            'type' => self::RULE_MAX,
+            'max'  => $length,
+        ];
+
+        return $self;
+    }
+
+    /**
      * @param array $schema
      */
     private function processRuleSchema(array $schema): void {
@@ -137,6 +175,18 @@ class ArraySchema extends SanitizerSchema {
     private function processRuleUnique(): void {
         if (\count(array_unique($this->value)) !== \count($this->value)) {
             throw new SanitizerException(SanitizerException::ERR_ARR_UNIQUE);
+        }
+    }
+
+    private function processRuleMin(int $min): void {
+        if (\count($this->value) < $min) {
+            throw new SanitizerException(SanitizerException::ERR_ARR_MIN, ['min' => $min]);
+        }
+    }
+
+    private function processRuleMax(int $max): void {
+        if (\count($this->value) > $max) {
+            throw new SanitizerException(SanitizerException::ERR_ARR_MAX, ['max' => $max]);
         }
     }
 }

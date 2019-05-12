@@ -7,6 +7,8 @@ class SanitizerException extends \Exception {
     public const ERR_ARR_INVALID       = 100;
     public const ERR_ARR_SCALAR        = 101;
     public const ERR_ARR_UNIQUE        = 102;
+    public const ERR_ARR_MIN           = 103;
+    public const ERR_ARR_MAX           = 104;
     public const ERR_BOOL_INVALID      = 200;
     public const ERR_DATE_INVALID      = 300;
     public const ERR_DATE_BEFORE       = 301;
@@ -39,6 +41,8 @@ class SanitizerException extends \Exception {
         self::ERR_ARR_INVALID       => 'Invalid array value.',
         self::ERR_ARR_SCALAR        => 'Array is not scalar.',
         self::ERR_ARR_UNIQUE        => 'Array is not unique.',
+        self::ERR_ARR_MIN           => 'Array length is below expected minimum of {{min}} items.',
+        self::ERR_ARR_MAX           => 'Array length is above expected minimum of {{max}} items.',
         self::ERR_BOOL_INVALID      => 'Invalid boolean value.',
         self::ERR_DATE_INVALID      => 'Invalid date value.',
         self::ERR_DATE_BEFORE       => 'Date is not before {{date}}.',

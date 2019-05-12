@@ -100,6 +100,8 @@ $processed = Sanitizer::process($input, SS::arr()->schema([
 | `unique`   | - | Checks if all values of the validated array are unique.
 | `each`     | `SanitizerSchema $schema` | Checks if each of the values of the validated array satisfy the specified `$schema`
 | `schema`   | `array $schema` | Validates every key => value based on provided schema.
+| `min`      | `int $length` | Validates if array has `$min` minimum length.
+| `max`      | `int $length` | Validates if array has `$max` maximum length.
 
 ### SS::decimal()
 | method | params | description |
