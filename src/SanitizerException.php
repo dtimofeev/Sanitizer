@@ -5,8 +5,9 @@ namespace sanitizer;
 
 class SanitizerException extends \Exception {
     public const ERR_ARR_INVALID       = 100;
-    public const ERR_ARR_SCALAR        = 101;
-    public const ERR_ARR_UNIQUE        = 102;
+    public const ERR_ARR_EMPTY         = 101;
+    public const ERR_ARR_SCALAR        = 102;
+    public const ERR_ARR_UNIQUE        = 103;
     public const ERR_BOOL_INVALID      = 200;
     public const ERR_DATE_INVALID      = 300;
     public const ERR_DATE_BEFORE       = 301;
@@ -37,6 +38,7 @@ class SanitizerException extends \Exception {
     /** @var array */
     public static $messages = [
         self::ERR_ARR_INVALID       => 'Invalid array value.',
+        self::ERR_ARR_EMPTY         => 'Array is empty.',
         self::ERR_ARR_SCALAR        => 'Array is not scalar.',
         self::ERR_ARR_UNIQUE        => 'Array is not unique.',
         self::ERR_BOOL_INVALID      => 'Invalid boolean value.',

@@ -21,6 +21,7 @@ class ArraySchema extends SanitizerSchema {
     public function process($input): ?array {
         if ((!isset($input) || empty($input)) && $this->optional) return $this->default;
         if (!\is_array($input)) throw new SanitizerException(SanitizerException::ERR_ARR_INVALID);
+        if (empty($input)) throw new SanitizerException(SanitizerException::ERR_ARR_EMPTY);
 
         $this->value = $input;
         foreach ($this->rules as $rule) {
