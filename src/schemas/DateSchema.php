@@ -69,11 +69,11 @@ class DateSchema extends SanitizerSchema {
             }
         }
 
-        $this->checkAliased();
-        $this->optional = true;
-        $this->default = $default;
+        $self = $this->aliased ? clone $this : $this;
+        $self->optional = true;
+        $self->default = $default;
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -82,8 +82,8 @@ class DateSchema extends SanitizerSchema {
      * @return DateSchema
      */
     public function before(string $date): DateSchema {
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type' => self::RULE_BEFORE,
             'date' => $date,
         ];
@@ -97,13 +97,13 @@ class DateSchema extends SanitizerSchema {
      * @return DateSchema
      */
     public function after(string $date): DateSchema {
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type' => self::RULE_AFTER,
             'date' => $date,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**

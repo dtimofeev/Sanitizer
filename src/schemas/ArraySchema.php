@@ -55,11 +55,11 @@ class ArraySchema extends SanitizerSchema {
             throw new \InvalidArgumentException('Trying to set non-array default value for array schema.');
         }
 
-        $this->checkAliased();
-        $this->optional = true;
-        $this->default = $default;
+        $self = $this->aliased ? clone $this : $this;
+        $self->optional = true;
+        $self->default = $default;
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -68,31 +68,31 @@ class ArraySchema extends SanitizerSchema {
      * @return ArraySchema
      */
     public function schema(array $schema): ArraySchema {
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type'   => self::RULE_SCHEMAS,
             'schema' => $schema,
         ];
 
-        return $this;
+        return $self;
     }
 
     public function scalar(): ArraySchema {
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type' => self::RULE_SCALAR,
         ];
 
-        return $this;
+        return $self;
     }
 
     public function unique(): ArraySchema {
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type' => self::RULE_UNIQUE,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -101,13 +101,13 @@ class ArraySchema extends SanitizerSchema {
      * @return ArraySchema
      */
     public function each(SanitizerSchema $schema): ArraySchema {
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type'   => self::RULE_EACH,
             'schema' => $schema,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**

@@ -63,11 +63,11 @@ class IntegerSchema extends SanitizerSchema {
             throw new \InvalidArgumentException('Trying to set non-integer default value for integer schema.');
         }
 
-        $this->checkAliased();
-        $this->optional = true;
-        $this->default = $default;
+        $self = $this->aliased ? clone $this : $this;
+        $self->optional = true;
+        $self->default = $default;
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -76,13 +76,13 @@ class IntegerSchema extends SanitizerSchema {
      * @return IntegerSchema
      */
     public function min(int $value): IntegerSchema {
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type'  => self::RULE_MIN,
             'value' => $value,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -91,13 +91,13 @@ class IntegerSchema extends SanitizerSchema {
      * @return IntegerSchema
      */
     public function max(int $value): IntegerSchema {
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type'  => self::RULE_MAX,
             'value' => $value,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -109,17 +109,17 @@ class IntegerSchema extends SanitizerSchema {
     public function between(int $min, int $max): IntegerSchema {
         if ($max < $min) throw new \InvalidArgumentException('Trying to define integer between validation with max < min.');
 
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type'  => self::RULE_MIN,
             'value' => $min,
         ];
-        $this->rules[] = [
+        $self->rules[] = [
             'type'  => self::RULE_MAX,
             'value' => $max,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -128,13 +128,13 @@ class IntegerSchema extends SanitizerSchema {
      * @return IntegerSchema
      */
     public function equals(int $expected): IntegerSchema {
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type'     => self::RULE_EQUALS,
             'expected' => $expected,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -143,13 +143,13 @@ class IntegerSchema extends SanitizerSchema {
      * @return IntegerSchema
      */
     public function not(int $unexpected): IntegerSchema {
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type'       => self::RULE_NOT,
             'unexpected' => $unexpected,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -162,13 +162,13 @@ class IntegerSchema extends SanitizerSchema {
             throw new \InvalidArgumentException('Values for "oneOf" rule should not be an empty array.');
         }
 
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type'   => self::RULE_ONE_OF,
             'values' => $values,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -181,13 +181,13 @@ class IntegerSchema extends SanitizerSchema {
             throw new \InvalidArgumentException('Values for "notOneOf" rule should not be an empty array.');
         }
 
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type'   => self::RULE_NOT_ONE_OF,
             'values' => $values,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**

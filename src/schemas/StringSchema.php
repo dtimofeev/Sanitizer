@@ -70,11 +70,11 @@ class StringSchema extends SanitizerSchema {
             throw new \InvalidArgumentException('Trying to set non-string default value for string schema.');
         }
 
-        $this->checkAliased();
-        $this->optional = true;
-        $this->default = $default;
+        $self = $this->aliased ? clone $this : $this;
+        $self->optional = true;
+        $self->default = $default;
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -88,14 +88,14 @@ class StringSchema extends SanitizerSchema {
             throw new \InvalidArgumentException('Trying to define string trim rule with both left & right disabled.');
         }
 
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type'  => self::RULE_TRIM,
             'left'  => $left,
             'right' => $right,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -105,15 +105,15 @@ class StringSchema extends SanitizerSchema {
      * @return StringSchema
      */
     public function length(int $length, string $charset = 'UTF-8'): StringSchema {
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type'    => self::RULE_LENGTH,
             'min'     => $length,
             'max'     => $length,
             'charset' => $charset,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -123,15 +123,15 @@ class StringSchema extends SanitizerSchema {
      * @return StringSchema
      */
     public function min(int $length, string $charset = 'UTF-8'): StringSchema {
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type'    => self::RULE_LENGTH,
             'min'     => $length,
             'max'     => null,
             'charset' => $charset,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -141,15 +141,15 @@ class StringSchema extends SanitizerSchema {
      * @return StringSchema
      */
     public function max(int $length, string $charset = 'UTF-8'): StringSchema {
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type'    => self::RULE_LENGTH,
             'min'     => null,
             'max'     => $length,
             'charset' => $charset,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -159,14 +159,14 @@ class StringSchema extends SanitizerSchema {
      * @return StringSchema
      */
     public function oneOf(array $values, bool $strict = true): StringSchema {
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type'   => self::RULE_ONE_OF,
             'values' => $values,
             'strict' => $strict,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -176,26 +176,26 @@ class StringSchema extends SanitizerSchema {
      * @return StringSchema
      */
     public function notOneOf(array $values, bool $strict = true): StringSchema {
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type'   => self::RULE_NOT_ONE_OF,
             'values' => $values,
             'strict' => $strict,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**
      * @return StringSchema
      */
     public function email(): StringSchema {
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type' => self::RULE_EMAIL,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -205,14 +205,14 @@ class StringSchema extends SanitizerSchema {
      * @return StringSchema
      */
     public function ip(bool $v4 = true, bool $v6 = false): StringSchema {
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type' => self::RULE_IP,
             'v4'   => $v4,
             'v6'   => $v6,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -221,13 +221,13 @@ class StringSchema extends SanitizerSchema {
      * @return StringSchema
      */
     public function url(bool $httpsOnly = false): StringSchema {
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type'      => self::RULE_URL,
             'httpsOnly' => $httpsOnly,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -237,14 +237,14 @@ class StringSchema extends SanitizerSchema {
      * @return StringSchema
      */
     public function regex(string $pattern, string $name = null): StringSchema {
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type'    => self::RULE_REGEX,
             'pattern' => $pattern,
             'name'    => $name,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -254,9 +254,7 @@ class StringSchema extends SanitizerSchema {
      * @return StringSchema
      */
     public function alpha(bool $dash = false, bool $space = false): StringSchema {
-        $this->regex('([' . ($space ? ' ' : '') . 'a-zA-Z' . ($dash ? '_-' : '') . '])+', 'alpha');
-
-        return $this;
+        return $this->regex('([' . ($space ? ' ' : '') . 'a-zA-Z' . ($dash ? '_-' : '') . '])+', 'alpha');
     }
 
     /**
@@ -266,9 +264,7 @@ class StringSchema extends SanitizerSchema {
      * @return StringSchema
      */
     public function alphaNum(bool $dash = false, bool $space = false): StringSchema {
-        $this->regex('([' . ($space ? ' ' : '') . 'a-zA-Z0-9' . ($dash ? '_-' : '') . '])+', 'alphaNum');
-
-        return $this;
+        return $this->regex('([' . ($space ? ' ' : '') . 'a-zA-Z0-9' . ($dash ? '_-' : '') . '])+', 'alphaNum');
     }
 
     /**

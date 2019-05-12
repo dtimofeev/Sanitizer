@@ -56,11 +56,11 @@ class DecimalSchema extends SanitizerSchema {
             throw new \InvalidArgumentException('Trying to set non-decimal default value for decimal schema.');
         }
 
-        $this->checkAliased();
-        $this->optional = true;
-        $this->default = $default;
+        $self = $this->aliased ? clone $this : $this;
+        $self->optional = true;
+        $self->default = $default;
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -69,13 +69,13 @@ class DecimalSchema extends SanitizerSchema {
      * @return DecimalSchema
      */
     public function min(int $value): DecimalSchema {
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type'  => self::RULE_MIN,
             'value' => $value,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**
@@ -84,13 +84,13 @@ class DecimalSchema extends SanitizerSchema {
      * @return DecimalSchema
      */
     public function max(int $value): DecimalSchema {
-        $this->checkAliased();
-        $this->rules[] = [
+        $self = $this->aliased ? clone $this : $this;
+        $self->rules[] = [
             'type'  => self::RULE_MAX,
             'value' => $value,
         ];
 
-        return $this;
+        return $self;
     }
 
     /**

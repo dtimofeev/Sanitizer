@@ -113,7 +113,10 @@ abstract class SanitizerSchema {
         self::$aliases[$name] = $schema;
     }
 
-    final protected function checkAliased(): void {
-        if ($this->aliased) throw new \LogicException('Change of aliased schemas is not allowed.');
+    /**
+     * Used to remove aliased property for cloned object.
+     */
+    final public function __clone() {
+        $this->aliased = false;
     }
 }
