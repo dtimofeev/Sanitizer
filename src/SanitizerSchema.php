@@ -24,14 +24,9 @@ abstract class SanitizerSchema {
     /**
      * @param null $default
      *
-     * @return self
+     * @return ArraySchema|BooleanSchema|DateSchema|IntegerSchema|StringSchema
      */
-    public function optional($default = null): self {
-        $this->optional = true;
-        $this->default = $default;
-
-        return $this;
-    }
+    abstract public function optional($default = null);
 
     /**
      * @param mixed $input

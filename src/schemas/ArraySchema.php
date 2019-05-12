@@ -12,8 +12,14 @@ class ArraySchema extends SanitizerSchema {
     private const RULE_UNIQUE  = 'unique';
     private const RULE_EACH    = 'each';
 
+    /**
+     * @param mixed $input
+     *
+     * @return array|null
+     * @throws SanitizerException
+     */
     public function process($input): ?array {
-        if (!isset($input) && $this->optional) return $this->default;
+        if ((!isset($input) || empty($input)) && $this->optional) return $this->default;
         if (!\is_array($input)) throw new SanitizerException('Invalid array value.');
 
         $this->value = $input;
@@ -37,6 +43,22 @@ class ArraySchema extends SanitizerSchema {
         }
 
         return $this->value;
+    }
+
+    /**
+     * @param null $default
+     *
+     * @return ArraySchema
+     */
+    public function optional($default = null): ArraySchema {
+        if (isset($default) && !\is_array($default)) {
+            throw new \InvalidArgumentException('Trying to set non-array default value for array schema.');
+        }
+
+        $this->optional = true;
+        $this->default = $default;
+
+        return $this;
     }
 
     /**

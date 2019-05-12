@@ -29,7 +29,6 @@ class DateSchema extends SanitizerSchema {
      */
     public function process($input): string {
         if (!isset($input) && $this->optional) return $this->default;
-
         if (!is_scalar($input)) throw new SanitizerException('Not a valid date.');
 
         $this->value = \DateTime::createFromFormat($this->format, $input);
@@ -51,6 +50,30 @@ class DateSchema extends SanitizerSchema {
         }
 
         return $this->value->format($this->format);
+    }
+
+    /**
+     * @param null $default
+     *
+     * @return DateSchema
+     */
+    public function optional($default = null): DateSchema {
+        if (!\is_string($default)) {
+            throw new \InvalidArgumentException('Trying to set non-date default value for date schema.');
+        }
+
+        $parsedDefault = \DateTime::createFromFormat($this->format, $default);
+        if (
+            isset($default) &&
+            (!$parsedDefault || $parsedDefault->format($this->format) !== $default)
+        ) {
+            throw new \InvalidArgumentException('Trying to set non-date default value for date schema.');
+        }
+
+        $this->optional = true;
+        $this->default = $default;
+
+        return $this;
     }
 
     /**
@@ -93,7 +116,7 @@ class DateSchema extends SanitizerSchema {
      * @param string $date
      */
     public function processRuleAfter(string $date): void {
-        $afterDate = (new \DateTime($date));
+        $afterDate = new \DateTime($date);
         if ($this->value <= $afterDate) throw new SanitizerException("Date should be after $date.");
     }
 }

@@ -62,4 +62,23 @@ class BooleanTest extends TestCase {
 
         Sanitizer::process(['key' => 'value'], SS::boolean());
     }
+
+    public function testOptional(): void {
+        $this->assertEquals(true, Sanitizer::process(null, SS::boolean()->optional(true)));
+
+        foreach ([
+            'test',
+            [],
+            100
+        ] as $case) {
+            try {
+                Sanitizer::process(null, SS::boolean()->optional($case));
+
+                $this->fail();
+            } catch (\Exception $e) {
+                $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+                $this->assertEquals('Trying to set non-boolean default value for boolean schema.', $e->getMessage());
+            }
+        }
+    }
 }

@@ -26,7 +26,7 @@ class ComplexTest extends TestCase {
             'nickname'  => SS::string()->alphaNum(),
             'email'     => SS::string()->email(),
             'ip'        => SS::string()->ip(),
-            'sex'       => SS::string()->oneOf(['male', 'female', 'na'])->optional('na'),
+            'sex'       => SS::string()->optional('na')->oneOf(['male', 'female', 'na']),
             'favMovies' => SS::arr()->each(
                 SS::arr()->schema([
                     'title'   => SS::string()->trim()->max(200),

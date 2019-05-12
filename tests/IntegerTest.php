@@ -182,4 +182,23 @@ class IntegerTest extends TestCase {
             $this->assertEquals('Values for "notOneOf" rule should not be an empty array.', $e->getMessage());
         }
     }
+
+    public function testOptional(): void {
+        $this->assertEquals(1, Sanitizer::process(null, SS::integer()->optional(1)));
+
+        foreach ([
+            'test',
+            [],
+            true
+        ] as $case) {
+            try {
+                Sanitizer::process(null, SS::integer()->optional($case));
+
+                $this->fail();
+            } catch (\Exception $e) {
+                $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+                $this->assertEquals('Trying to set non-integer default value for integer schema.', $e->getMessage());
+            }
+        }
+    }
 }

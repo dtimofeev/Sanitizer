@@ -55,6 +55,22 @@ class IntegerSchema extends SanitizerSchema {
     }
 
     /**
+     * @param null $default
+     *
+     * @return IntegerSchema
+     */
+    public function optional($default = null): IntegerSchema {
+        if (isset($default) && !\is_int($default)) {
+            throw new \InvalidArgumentException('Trying to set non-integer default value for integer schema.');
+        }
+
+        $this->optional = true;
+        $this->default = $default;
+
+        return $this;
+    }
+
+    /**
      * @param int $value
      *
      * @return IntegerSchema

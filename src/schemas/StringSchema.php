@@ -61,6 +61,22 @@ class StringSchema extends SanitizerSchema {
     }
 
     /**
+     * @param null $default
+     *
+     * @return StringSchema
+     */
+    public function optional($default = null): StringSchema {
+        if (isset($default) && !\is_string($default)) {
+            throw new \InvalidArgumentException('Trying to set non-string default value for string schema.');
+        }
+
+        $this->optional = true;
+        $this->default = $default;
+
+        return $this;
+    }
+
+    /**
      * @param bool $left
      * @param bool $right
      *

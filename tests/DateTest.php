@@ -46,6 +46,26 @@ class DateTest extends TestCase {
         }
     }
 
+    public function testOptional(): void {
+        $valid = '2019-01-01 10:00:00';
+        $this->assertEquals($valid, Sanitizer::process(null, SS::date('Y-m-d H:i:s')->optional($valid)));
+
+        foreach ([
+            'test',
+            [],
+            100
+        ] as $case) {
+            try {
+                Sanitizer::process(null, SS::date('Y-m-d H:i:s')->optional($case));
+
+                $this->fail();
+            } catch (\Exception $e) {
+                $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+                $this->assertEquals('Trying to set non-date default value for date schema.', $e->getMessage());
+            }
+        }
+    }
+
     public function testRuleBefore(): void {
         $input = '2019-01-01 10:00:02';
         $before = '2019-01-01 10:00:03';

@@ -231,4 +231,23 @@ class StringTest extends TestCase {
     public function testRuleRegex(): void {
         $this->assertEquals('#d3d3d3', Sanitizer::process('#d3d3d3', SS::string()->regex('#[a-f0-9]{6}')));
     }
+
+    public function testOptional(): void {
+        $this->assertEquals('test', Sanitizer::process(null, SS::string()->optional('test')));
+
+        foreach ([
+            [],
+            true,
+            1
+        ] as $case) {
+            try {
+                Sanitizer::process(null, SS::string()->optional($case));
+
+                $this->fail();
+            } catch (\Exception $e) {
+                $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+                $this->assertEquals('Trying to set non-string default value for string schema.', $e->getMessage());
+            }
+        }
+    }
 }

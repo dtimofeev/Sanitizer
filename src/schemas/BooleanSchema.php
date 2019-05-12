@@ -19,4 +19,20 @@ class BooleanSchema extends SanitizerSchema {
 
         return $this->value;
     }
+
+    /**
+     * @param null $default
+     *
+     * @return BooleanSchema
+     */
+    public function optional($default = null): BooleanSchema {
+        if (isset($default) && !\is_bool($default)) {
+            throw new \InvalidArgumentException('Trying to set non-boolean default value for boolean schema.');
+        }
+
+        $this->optional = true;
+        $this->default = $default;
+
+        return $this;
+    }
 }

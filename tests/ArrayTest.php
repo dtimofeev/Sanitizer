@@ -35,6 +35,29 @@ class ArrayTest extends TestCase {
         }
     }
 
+    public function testOptional(): void {
+        $valid = [
+            'key' => 'value'
+        ];
+
+        $this->assertEquals($valid, Sanitizer::process([], SS::arr()->optional($valid)));
+        $this->assertEquals($valid, Sanitizer::process(null, SS::arr()->optional($valid)));
+
+        foreach ([
+            'test',
+            true,
+        ] as $case) {
+            try {
+                Sanitizer::process($valid, SS::arr()->optional($case));
+
+                $this->fail();
+            } catch (\Exception $e) {
+                $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+                $this->assertEquals('Trying to set non-array default value for array schema.', $e->getMessage());
+            }
+        }
+    }
+
     public function testRuleScalar(): void {
         foreach ([
             [1, 1, 1],
