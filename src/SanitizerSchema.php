@@ -5,6 +5,7 @@ namespace sanitizer;
 use sanitizer\schemas\ArraySchema;
 use sanitizer\schemas\BooleanSchema;
 use sanitizer\schemas\DateSchema;
+use sanitizer\schemas\DecimalSchema;
 use sanitizer\schemas\IntegerSchema;
 use sanitizer\schemas\StringSchema;
 
@@ -74,6 +75,13 @@ abstract class SanitizerSchema {
      */
     final public static function date(string $format): DateSchema {
         return new DateSchema($format);
+    }
+
+    /**
+     * @return DecimalSchema
+     */
+    final public static function decimal(): DecimalSchema {
+        return new DecimalSchema();
     }
 
     /**

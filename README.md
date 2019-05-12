@@ -101,5 +101,12 @@ $processed = Sanitizer::process($input, SS::arr()->schema([
 | `each`     | `SanitizerSchema $schema` | Checks if each of the values of the validated array satisfy the specified `$schema`
 | `schema`   | `array $schema` | Validates every key => value based on provided schema.
 
+### SS::decimal()
+| method | params | description |
+| ---    | :---   | :---        |
+| `optional` | `?string/int/float $default` | Sets a default string/int/float in case a value is not provided for validation.
+| `min`      | `string/int/float $value` | Checks if the value is above or equal to the one provided in parameter.
+| `max`      | `string/int/float $value` | Checks if the value is below or equal to the one provided in parameter.
+
 # Custom error messages
 Error messages are defined inside a static map `SanitizerException::$messages` and can be easily redefined. This can be used for multilingual messages for example.

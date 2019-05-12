@@ -28,6 +28,9 @@ class SanitizerException extends \Exception {
     public const ERR_STR_URL           = 507;
     public const ERR_STR_URL_NOT_HTTPS = 508;
     public const ERR_STR_REGEX         = 509;
+    public const ERR_DEC_INVALID       = 600;
+    public const ERR_DEC_MIN           = 601;
+    public const ERR_DEC_MAX           = 602;
 
     public static $baseMessage = 'Validation for field {{path}} has failed.';
 
@@ -57,6 +60,9 @@ class SanitizerException extends \Exception {
         self::ERR_STR_URL           => 'Not a valid URL.',
         self::ERR_STR_URL_NOT_HTTPS => 'URL is not HTTPS.',
         self::ERR_STR_REGEX         => 'Provided string does not match the {{pattern}} pattern.',
+        self::ERR_DEC_INVALID       => 'Invalid decimal.',
+        self::ERR_DEC_MIN           => 'Value is below the minimum of {{value}}.',
+        self::ERR_DEC_MAX           => 'Value is above the maximum of {{value}}.',
     ];
 
     /** @var string[] */

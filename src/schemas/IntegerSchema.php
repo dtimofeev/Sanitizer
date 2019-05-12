@@ -190,10 +190,10 @@ class IntegerSchema extends SanitizerSchema {
     }
 
     /**
-     * @param int $min
+     * @param int $max
      */
-    private function processRuleMax(int $min): void {
-        if ($this->value > $min) throw new SanitizerException(SanitizerException::ERR_INT_MAX, ['value' => $min]);
+    private function processRuleMax(int $max): void {
+        if ($this->value > $max) throw new SanitizerException(SanitizerException::ERR_INT_MAX, ['value' => $max]);
     }
 
     /**
