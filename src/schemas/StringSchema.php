@@ -70,6 +70,7 @@ class StringSchema extends SanitizerSchema {
             throw new \InvalidArgumentException('Trying to set non-string default value for string schema.');
         }
 
+        $this->checkAliased();
         $this->optional = true;
         $this->default = $default;
 
@@ -87,6 +88,7 @@ class StringSchema extends SanitizerSchema {
             throw new \InvalidArgumentException('Trying to define string trim rule with both left & right disabled.');
         }
 
+        $this->checkAliased();
         $this->rules[] = [
             'type'  => self::RULE_TRIM,
             'left'  => $left,
@@ -103,6 +105,7 @@ class StringSchema extends SanitizerSchema {
      * @return StringSchema
      */
     public function length(int $length, string $charset = 'UTF-8'): StringSchema {
+        $this->checkAliased();
         $this->rules[] = [
             'type'    => self::RULE_LENGTH,
             'min'     => $length,
@@ -120,6 +123,7 @@ class StringSchema extends SanitizerSchema {
      * @return StringSchema
      */
     public function min(int $length, string $charset = 'UTF-8'): StringSchema {
+        $this->checkAliased();
         $this->rules[] = [
             'type'    => self::RULE_LENGTH,
             'min'     => $length,
@@ -137,6 +141,7 @@ class StringSchema extends SanitizerSchema {
      * @return StringSchema
      */
     public function max(int $length, string $charset = 'UTF-8'): StringSchema {
+        $this->checkAliased();
         $this->rules[] = [
             'type'    => self::RULE_LENGTH,
             'min'     => null,
@@ -154,6 +159,7 @@ class StringSchema extends SanitizerSchema {
      * @return StringSchema
      */
     public function oneOf(array $values, bool $strict = true): StringSchema {
+        $this->checkAliased();
         $this->rules[] = [
             'type'   => self::RULE_ONE_OF,
             'values' => $values,
@@ -170,6 +176,7 @@ class StringSchema extends SanitizerSchema {
      * @return StringSchema
      */
     public function notOneOf(array $values, bool $strict = true): StringSchema {
+        $this->checkAliased();
         $this->rules[] = [
             'type'   => self::RULE_NOT_ONE_OF,
             'values' => $values,
@@ -183,6 +190,7 @@ class StringSchema extends SanitizerSchema {
      * @return StringSchema
      */
     public function email(): StringSchema {
+        $this->checkAliased();
         $this->rules[] = [
             'type' => self::RULE_EMAIL,
         ];
@@ -197,6 +205,7 @@ class StringSchema extends SanitizerSchema {
      * @return StringSchema
      */
     public function ip(bool $v4 = true, bool $v6 = false): StringSchema {
+        $this->checkAliased();
         $this->rules[] = [
             'type' => self::RULE_IP,
             'v4'   => $v4,
@@ -212,6 +221,7 @@ class StringSchema extends SanitizerSchema {
      * @return StringSchema
      */
     public function url(bool $httpsOnly = false): StringSchema {
+        $this->checkAliased();
         $this->rules[] = [
             'type'      => self::RULE_URL,
             'httpsOnly' => $httpsOnly,
@@ -227,6 +237,7 @@ class StringSchema extends SanitizerSchema {
      * @return StringSchema
      */
     public function regex(string $pattern, string $name = null): StringSchema {
+        $this->checkAliased();
         $this->rules[] = [
             'type'    => self::RULE_REGEX,
             'pattern' => $pattern,

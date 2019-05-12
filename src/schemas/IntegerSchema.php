@@ -63,6 +63,7 @@ class IntegerSchema extends SanitizerSchema {
             throw new \InvalidArgumentException('Trying to set non-integer default value for integer schema.');
         }
 
+        $this->checkAliased();
         $this->optional = true;
         $this->default = $default;
 
@@ -75,6 +76,7 @@ class IntegerSchema extends SanitizerSchema {
      * @return IntegerSchema
      */
     public function min(int $value): IntegerSchema {
+        $this->checkAliased();
         $this->rules[] = [
             'type'  => self::RULE_MIN,
             'value' => $value,
@@ -89,6 +91,7 @@ class IntegerSchema extends SanitizerSchema {
      * @return IntegerSchema
      */
     public function max(int $value): IntegerSchema {
+        $this->checkAliased();
         $this->rules[] = [
             'type'  => self::RULE_MAX,
             'value' => $value,
@@ -106,6 +109,7 @@ class IntegerSchema extends SanitizerSchema {
     public function between(int $min, int $max): IntegerSchema {
         if ($max < $min) throw new \InvalidArgumentException('Trying to define integer between validation with max < min.');
 
+        $this->checkAliased();
         $this->rules[] = [
             'type'  => self::RULE_MIN,
             'value' => $min,
@@ -124,6 +128,7 @@ class IntegerSchema extends SanitizerSchema {
      * @return IntegerSchema
      */
     public function equals(int $expected): IntegerSchema {
+        $this->checkAliased();
         $this->rules[] = [
             'type'     => self::RULE_EQUALS,
             'expected' => $expected,
@@ -138,6 +143,7 @@ class IntegerSchema extends SanitizerSchema {
      * @return IntegerSchema
      */
     public function not(int $unexpected): IntegerSchema {
+        $this->checkAliased();
         $this->rules[] = [
             'type'       => self::RULE_NOT,
             'unexpected' => $unexpected,
@@ -156,6 +162,7 @@ class IntegerSchema extends SanitizerSchema {
             throw new \InvalidArgumentException('Values for "oneOf" rule should not be an empty array.');
         }
 
+        $this->checkAliased();
         $this->rules[] = [
             'type'   => self::RULE_ONE_OF,
             'values' => $values,
@@ -174,6 +181,7 @@ class IntegerSchema extends SanitizerSchema {
             throw new \InvalidArgumentException('Values for "notOneOf" rule should not be an empty array.');
         }
 
+        $this->checkAliased();
         $this->rules[] = [
             'type'   => self::RULE_NOT_ONE_OF,
             'values' => $values,

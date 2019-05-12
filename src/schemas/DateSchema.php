@@ -58,18 +58,18 @@ class DateSchema extends SanitizerSchema {
      * @return DateSchema
      */
     public function optional($default = null): DateSchema {
-        if (!\is_string($default)) {
-            throw new \InvalidArgumentException('Trying to set non-date default value for date schema.');
+        if (isset($default)) {
+            if (!\is_string($default)) {
+                throw new \InvalidArgumentException('Trying to set non-date default value for date schema.');
+            }
+
+            $parsedDefault = \DateTime::createFromFormat($this->format, $default);
+            if (!$parsedDefault || $parsedDefault->format($this->format) !== $default) {
+                throw new \InvalidArgumentException('Trying to set non-date default value for date schema.');
+            }
         }
 
-        $parsedDefault = \DateTime::createFromFormat($this->format, $default);
-        if (
-            isset($default) &&
-            (!$parsedDefault || $parsedDefault->format($this->format) !== $default)
-        ) {
-            throw new \InvalidArgumentException('Trying to set non-date default value for date schema.');
-        }
-
+        $this->checkAliased();
         $this->optional = true;
         $this->default = $default;
 
@@ -82,6 +82,7 @@ class DateSchema extends SanitizerSchema {
      * @return DateSchema
      */
     public function before(string $date): DateSchema {
+        $this->checkAliased();
         $this->rules[] = [
             'type' => self::RULE_BEFORE,
             'date' => $date,
@@ -96,6 +97,7 @@ class DateSchema extends SanitizerSchema {
      * @return DateSchema
      */
     public function after(string $date): DateSchema {
+        $this->checkAliased();
         $this->rules[] = [
             'type' => self::RULE_AFTER,
             'date' => $date,

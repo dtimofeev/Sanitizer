@@ -22,6 +22,9 @@ abstract class SanitizerSchema {
     /** @var array */
     protected $rules = [];
 
+    /** @var bool */
+    protected $aliased = false;
+
     /** @var SanitizerSchema[] */
     private static $aliases = [];
 
@@ -106,6 +109,11 @@ abstract class SanitizerSchema {
             throw new \InvalidArgumentException("Schema alias with name $name is already set.");
         }
 
+        $schema->aliased = true;
         self::$aliases[$name] = $schema;
+    }
+
+    final protected function checkAliased(): void {
+        if ($this->aliased) throw new \LogicException('Change of aliased schemas is not allowed.');
     }
 }

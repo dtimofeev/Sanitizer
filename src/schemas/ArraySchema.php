@@ -55,6 +55,7 @@ class ArraySchema extends SanitizerSchema {
             throw new \InvalidArgumentException('Trying to set non-array default value for array schema.');
         }
 
+        $this->checkAliased();
         $this->optional = true;
         $this->default = $default;
 
@@ -67,6 +68,7 @@ class ArraySchema extends SanitizerSchema {
      * @return ArraySchema
      */
     public function schema(array $schema): ArraySchema {
+        $this->checkAliased();
         $this->rules[] = [
             'type'   => self::RULE_SCHEMAS,
             'schema' => $schema,
@@ -76,6 +78,7 @@ class ArraySchema extends SanitizerSchema {
     }
 
     public function scalar(): ArraySchema {
+        $this->checkAliased();
         $this->rules[] = [
             'type' => self::RULE_SCALAR,
         ];
@@ -84,6 +87,7 @@ class ArraySchema extends SanitizerSchema {
     }
 
     public function unique(): ArraySchema {
+        $this->checkAliased();
         $this->rules[] = [
             'type' => self::RULE_UNIQUE,
         ];
@@ -97,6 +101,7 @@ class ArraySchema extends SanitizerSchema {
      * @return ArraySchema
      */
     public function each(SanitizerSchema $schema): ArraySchema {
+        $this->checkAliased();
         $this->rules[] = [
             'type'   => self::RULE_EACH,
             'schema' => $schema,

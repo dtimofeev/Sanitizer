@@ -30,6 +30,7 @@ class BooleanSchema extends SanitizerSchema {
             throw new \InvalidArgumentException('Trying to set non-boolean default value for boolean schema.');
         }
 
+        $this->checkAliased();
         $this->optional = true;
         $this->default = $default;
 

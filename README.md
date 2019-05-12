@@ -63,7 +63,7 @@ $processed = Sanitizer::process($input, SS::arr()->schema([
 | `min`      | `int $value` | Checks if the value is above or equal to the one provided in parameter.
 | `max`      | `int $value` | Checks if the value is below or equal to the one provided in parameter.
 | `between`  | `int $min`, `int $max` | Checks if the value is between minimum and maximum provided in params.
-| `equal`    | `int $expected` | Checks if the value is equal to the one provided in parameter.
+| `equals`   | `int $expected` | Checks if the value is equal to the one provided in parameter.
 | `not`      | `int $unexpected` | Checks if the value is not equal to the one provided in parameter.
 | `oneOf`    | `int[] $values` | Checks if the value is one of the array provided in parameter.
 | `notOneOf` | `int[] $values` | Checks if the value is not one of the array provided in parameter.
