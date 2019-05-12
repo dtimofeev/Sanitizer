@@ -4,6 +4,7 @@ namespace sanitizer;
 
 use sanitizer\schemas\ArraySchema;
 use sanitizer\schemas\BooleanSchema;
+use sanitizer\schemas\DateSchema;
 use sanitizer\schemas\IntegerSchema;
 use sanitizer\schemas\StringSchema;
 
@@ -14,7 +15,7 @@ abstract class SanitizerSchema {
     /** @var bool */
     protected $optional;
 
-    /** @var mixed */
+    /** @var int|string|bool|array|\DateTime */
     protected $value;
 
     /** @var array */
@@ -66,5 +67,14 @@ abstract class SanitizerSchema {
      */
     final public static function arr(): ArraySchema {
         return new ArraySchema();
+    }
+
+    /**
+     * @param string $format
+     *
+     * @return DateSchema
+     */
+    final public static function date(string $format): DateSchema {
+        return new DateSchema($format);
     }
 }
