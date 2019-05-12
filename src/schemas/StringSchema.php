@@ -148,30 +148,6 @@ class StringSchema extends SanitizerSchema {
     }
 
     /**
-     * @param array $values
-     * @param bool $strict
-     */
-    private function processRuleOneOf(array $values, bool $strict): void {
-        if (!\in_array($this->value, $values, $strict)) {
-            $valuesString = implode('|', $values);
-
-            throw new SanitizerException("Value should be one of ($valuesString)");
-        }
-    }
-
-    /**
-     * @param array $values
-     * @param bool $strict
-     */
-    private function processRuleNotOneOf(array $values, bool $strict): void {
-        if (\in_array($this->value, $values, $strict)) {
-            $valuesString = implode('|', $values);
-
-            throw new SanitizerException("Value should not be one of ($valuesString)");
-        }
-    }
-
-    /**
      * @param string[] $values
      * @param bool $strict
      *
@@ -307,6 +283,30 @@ class StringSchema extends SanitizerSchema {
         $length = mb_strlen($this->value, $charset);
         if ($min !== null && $length < $min) throw new SanitizerException("String length is below expected minimum of $min characters.");
         if ($max !== null && $length > $max) throw new SanitizerException("String length is above expected maximum of $max characters.");
+    }
+
+    /**
+     * @param array $values
+     * @param bool $strict
+     */
+    private function processRuleOneOf(array $values, bool $strict): void {
+        if (!\in_array($this->value, $values, $strict)) {
+            $valuesString = implode('|', $values);
+
+            throw new SanitizerException("Value should be one of ($valuesString)");
+        }
+    }
+
+    /**
+     * @param array $values
+     * @param bool $strict
+     */
+    private function processRuleNotOneOf(array $values, bool $strict): void {
+        if (\in_array($this->value, $values, $strict)) {
+            $valuesString = implode('|', $values);
+
+            throw new SanitizerException("Value should not be one of ($valuesString)");
+        }
     }
 
     private function processRuleEmail(): void {
