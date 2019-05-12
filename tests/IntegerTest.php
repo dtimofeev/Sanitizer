@@ -5,7 +5,6 @@ namespace sanitizer\tests;
 use PHPUnit\Framework\TestCase;
 use sanitizer\Sanitizer;
 use sanitizer\SanitizerException;
-use sanitizer\SanitizerRuleException;
 use sanitizer\SanitizerSchema;
 use sanitizer\SanitizerSchema as SS;
 use sanitizer\schemas\IntegerSchema;
@@ -108,7 +107,7 @@ class IntegerTest extends TestCase {
 
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertInstanceOf(SanitizerRuleException::class, $e);
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
         }
     }
 
@@ -158,7 +157,7 @@ class IntegerTest extends TestCase {
 
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertInstanceOf(SanitizerRuleException::class, $e);
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
             $this->assertEquals('Values for "oneOf" rule should not be an empty array.', $e->getMessage());
         }
     }
@@ -179,7 +178,7 @@ class IntegerTest extends TestCase {
 
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertInstanceOf(SanitizerRuleException::class, $e);
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
             $this->assertEquals('Values for "notOneOf" rule should not be an empty array.', $e->getMessage());
         }
     }

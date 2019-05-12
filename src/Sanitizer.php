@@ -14,8 +14,8 @@ class Sanitizer {
     public static function process($input, SanitizerSchema $schema, string $field = '$') {
         try {
             return $schema->process($input);
-        } catch (\Exception $e) {
-            throw new SanitizerException($field, $e);
+        } catch (SanitizerException $e) {
+            throw new SanitizerException($e->getMessage(), $field, $e);
         }
     }
 }

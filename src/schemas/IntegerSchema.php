@@ -2,7 +2,8 @@
 
 namespace sanitizer\schemas;
 
-use sanitizer\SanitizerRuleException;
+use http\Exception\InvalidArgumentException;
+use sanitizer\SanitizerException;
 use sanitizer\SanitizerSchema;
 
 class IntegerSchema extends SanitizerSchema {
@@ -20,10 +21,10 @@ class IntegerSchema extends SanitizerSchema {
      */
     public function process($input): ?int {
         if (!isset($input) && $this->optional) return $this->default;
-        if (!\is_numeric($input)) throw new SanitizerRuleException('Invalid integer value.');
+        if (!\is_numeric($input)) throw new SanitizerException('Invalid integer value.');
 
         $this->value = filter_var($input, FILTER_VALIDATE_INT);
-        if ($this->value === false) throw new SanitizerRuleException('Invalid integer value.');
+        if ($this->value === false) throw new SanitizerException('Invalid integer value.');
 
         foreach ($this->rules as $rule) {
             switch ($rule['type']) {
@@ -88,7 +89,7 @@ class IntegerSchema extends SanitizerSchema {
      * @return IntegerSchema
      */
     public function between(int $min, int $max): IntegerSchema {
-        if ($max < $min) throw new SanitizerRuleException('Trying to define integer between validation with max < min.');
+        if ($max < $min) throw new \InvalidArgumentException('Trying to define integer between validation with max < min.');
 
         $this->rules[] = [
             'type'  => self::RULE_MIN,
@@ -137,7 +138,7 @@ class IntegerSchema extends SanitizerSchema {
      */
     public function oneOf(array $values): IntegerSchema {
         if (empty($values)) {
-            throw new SanitizerRuleException('Values for "oneOf" rule should not be an empty array.');
+            throw new \InvalidArgumentException('Values for "oneOf" rule should not be an empty array.');
         }
 
         $this->rules[] = [
@@ -155,7 +156,7 @@ class IntegerSchema extends SanitizerSchema {
      */
     public function notOneOf(array $values): IntegerSchema {
         if (empty($values)) {
-            throw new SanitizerRuleException('Values for "notOneOf" rule should not be an empty array.');
+            throw new \InvalidArgumentException('Values for "notOneOf" rule should not be an empty array.');
         }
 
         $this->rules[] = [
@@ -170,28 +171,28 @@ class IntegerSchema extends SanitizerSchema {
      * @param int $min
      */
     private function processRuleMin(int $min): void {
-        if ($this->value < $min) throw new SanitizerRuleException('Value is less than expected minimum of ' . $min);
+        if ($this->value < $min) throw new SanitizerException('Value is less than expected minimum of ' . $min);
     }
 
     /**
      * @param int $min
      */
     private function processRuleMax(int $min): void {
-        if ($this->value > $min) throw new SanitizerRuleException('Value is more than expected maximum of ' . $min);
+        if ($this->value > $min) throw new SanitizerException('Value is more than expected maximum of ' . $min);
     }
 
     /**
      * @param int $expected
      */
     private function processRuleEquals(int $expected): void {
-        if ($this->value !== $expected) throw new SanitizerRuleException("Value does not equal expected $expected.");
+        if ($this->value !== $expected) throw new SanitizerException("Value does not equal expected $expected.");
     }
 
     /**
      * @param int $unexpected
      */
     private function processRuleNot(int $unexpected): void {
-        if ($this->value === $unexpected) throw new SanitizerRuleException("Value should not equal $unexpected.");
+        if ($this->value === $unexpected) throw new SanitizerException("Value should not equal $unexpected.");
     }
 
     /**
@@ -201,7 +202,7 @@ class IntegerSchema extends SanitizerSchema {
         if (!\in_array($this->value, $values, true)) {
             $valuesString = implode('|', $values);
 
-            throw new SanitizerRuleException("Value should be one of ($valuesString).");
+            throw new SanitizerException("Value should be one of ($valuesString).");
         }
     }
 
@@ -212,7 +213,7 @@ class IntegerSchema extends SanitizerSchema {
         if (\in_array($this->value, $values, true)) {
             $valuesString = implode('|', $values);
 
-            throw new SanitizerRuleException("Value should not be one of ($valuesString).");
+            throw new SanitizerException("Value should not be one of ($valuesString).");
         }
     }
 }

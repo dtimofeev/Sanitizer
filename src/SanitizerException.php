@@ -10,24 +10,42 @@ class SanitizerException extends \Exception {
     /** @var string */
     private $ruleError;
 
-    public function __construct(string $field, \Throwable $previous = null) {
-        if ($previous) {
-            if ($previous instanceof SanitizerException) {
-                $this->chain = $previous->getChain();
-                $this->ruleError = $previous->getRuleError();
-            } else {
-                $this->ruleError = $previous->getMessage();
-            }
+    /**
+     * SanitizerException constructor.
+     *
+     * @param string $message
+     * @param string|null $field
+     * @param \Throwable|null $previous
+     */
+    public function __construct(string $message, string $field = null, \Throwable $previous = null) {
+        if (!$previous) {
+            $this->ruleError = $message;
+        } elseif ($previous instanceof SanitizerException) {
+            $this->chain = $previous->getChain();
+            $this->ruleError = $previous->getRuleError();
         }
-        $this->chain[] = $field;
 
-        parent::__construct('Validation for field ' . implode('.', array_reverse($this->chain)) . ' has failed. ' . $this->ruleError);
+        if ($field) $this->chain[] = $field;
+
+        $message = '';
+        if ($this->chain) {
+            $message = 'Validation for field ' . implode('.', array_reverse($this->chain)) . ' has failed. ';
+        }
+        $message .= $this->ruleError;
+
+        parent::__construct($message);
     }
 
+    /**
+     * @return array
+     */
     public function getChain(): array {
         return $this->chain;
     }
 
+    /**
+     * @return string
+     */
     public function getRuleError(): string {
         return $this->ruleError;
     }

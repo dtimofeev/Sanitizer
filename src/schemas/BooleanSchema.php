@@ -2,7 +2,7 @@
 
 namespace sanitizer\schemas;
 
-use sanitizer\SanitizerRuleException;
+use sanitizer\SanitizerException;
 use sanitizer\SanitizerSchema;
 
 class BooleanSchema extends SanitizerSchema {
@@ -15,7 +15,7 @@ class BooleanSchema extends SanitizerSchema {
         if (!isset($input) && $this->optional) return $this->default;
 
         $this->value = filter_var($input, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-        if ($this->value === null) throw new SanitizerRuleException('Expected boolean value.');
+        if ($this->value === null) throw new SanitizerException('Expected boolean value.');
 
         return $this->value;
     }

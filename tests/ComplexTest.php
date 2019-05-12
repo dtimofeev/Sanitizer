@@ -51,7 +51,7 @@ class ComplexTest extends TestCase {
         ];
 
         try {
-            $processed = Sanitizer::process($input, SS::arr()->schema([
+            Sanitizer::process($input, SS::arr()->schema([
                 'favMovies' => SS::arr()->each(
                     SS::arr()->schema([
                         'title' => SS::string()->trim()->max(200),
@@ -62,7 +62,7 @@ class ComplexTest extends TestCase {
                 ),
             ]));
         } catch (\Exception $e) {
-            $this->assertContains('$.favMovies.0.tags.0', $e->getMessage());
+            $this->assertEquals('Validation for field $.favMovies.tags has failed. Provided string does not match the alphaNum pattern.', $e->getMessage());
         }
     }
 }

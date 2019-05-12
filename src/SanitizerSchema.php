@@ -36,6 +36,7 @@ abstract class SanitizerSchema {
      * @param mixed $input
      *
      * @return mixed
+     * @throws SanitizerException
      */
     abstract public function process($input);
 
