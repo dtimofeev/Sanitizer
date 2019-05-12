@@ -2,7 +2,6 @@
 
 namespace sanitizer\schemas;
 
-use http\Exception\InvalidArgumentException;
 use sanitizer\SanitizerException;
 use sanitizer\SanitizerSchema;
 

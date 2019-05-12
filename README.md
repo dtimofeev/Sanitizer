@@ -14,9 +14,7 @@ use sanitizer\SanitizerSchema as SS;
 $processed = Sanitezer::process(true, SS::boolean());
 
 // Complex schema
-$processed = Sanitizer::process([
-    // Input data
-], SS::arr()->schema([
+$processed = Sanitizer::process($input, SS::arr()->schema([
     'id'        => SS::integer()->min(1),
     'nickname'  => SS::string()->alphaNum(),
     'email'     => SS::string()->email(),
@@ -29,6 +27,24 @@ $processed = Sanitizer::process([
             'tags'    => SS::arr()->unique()->each(
                 SS::string()->alphaNum()
             ),
+        ])
+    ),
+]));
+```
+
+# Aliases
+
+Aliases allow for a single definition of commonly used sanitation rules. They can be defined via `SS::createAlias(string $name, SanitizerSchema  $schema)` and used as normal schema rules `SS::alias($name)` everywhere, no matter the depth. Because of the schemas nature these are also more memory efficient than defining a separate schemas.  
+
+##### Example:
+```php
+SS::createAlias('alphaNum', SS::string()->alphaNum());
+
+$processed = Sanitizer::process($input, SS::arr()->schema([
+    'nickname'  => SS::alias('alphaNum'),
+    'favMovies' => SS::arr()->each(
+        SS::arr()->schema([
+            'tags' => SS::arr()->unique()->each(SS::alias('alphaNum')),
         ])
     ),
 ]));

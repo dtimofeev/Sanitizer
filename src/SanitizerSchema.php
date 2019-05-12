@@ -21,6 +21,9 @@ abstract class SanitizerSchema {
     /** @var array */
     protected $rules = [];
 
+    /** @var SanitizerSchema[] */
+    private static $aliases = [];
+
     /**
      * @param null $default
      *
@@ -71,5 +74,30 @@ abstract class SanitizerSchema {
      */
     final public static function date(string $format): DateSchema {
         return new DateSchema($format);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return ArraySchema|BooleanSchema|DateSchema|IntegerSchema|StringSchema
+     */
+    final public static function alias(string $name): SanitizerSchema {
+        if (!isset(self::$aliases[$name])) {
+            throw new \InvalidArgumentException("Undefined alias with name $name.");
+        }
+
+        return self::$aliases[$name];
+    }
+
+    /**
+     * @param string $name
+     * @param SanitizerSchema $schema
+     */
+    final public static function createAlias(string $name, SanitizerSchema $schema): void {
+        if (isset(self::$aliases[$name])) {
+            throw new \InvalidArgumentException("Schema alias with name $name is already set.");
+        }
+
+        self::$aliases[$name] = $schema;
     }
 }
