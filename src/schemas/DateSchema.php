@@ -107,7 +107,7 @@ class DateSchema extends SanitizerSchema {
     /**
      * @param string $date
      */
-    public function processRuleBefore(string $date): void {
+    private function processRuleBefore(string $date): void {
         $beforeDate = (new \DateTime($date));
         if ($this->value >= $beforeDate) throw new SanitizerException("Date should be before $date.");
     }
@@ -115,7 +115,7 @@ class DateSchema extends SanitizerSchema {
     /**
      * @param string $date
      */
-    public function processRuleAfter(string $date): void {
+    private function processRuleAfter(string $date): void {
         $afterDate = new \DateTime($date);
         if ($this->value <= $afterDate) throw new SanitizerException("Date should be after $date.");
     }

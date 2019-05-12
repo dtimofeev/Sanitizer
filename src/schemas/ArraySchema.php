@@ -108,7 +108,7 @@ class ArraySchema extends SanitizerSchema {
     /**
      * @param array $schema
      */
-    public function processRuleSchema(array $schema): void {
+    private function processRuleSchema(array $schema): void {
         foreach ($schema as $key => $rules) {
             $this->value[$key] = Sanitizer::process($this->value[$key] ?? null, $rules, $key);
         }
@@ -117,19 +117,19 @@ class ArraySchema extends SanitizerSchema {
     /**
      * @param SanitizerSchema $schema
      */
-    public function processRuleEach(SanitizerSchema $schema): void {
+    private function processRuleEach(SanitizerSchema $schema): void {
         foreach ($this->value as $key => &$value) {
             $value = Sanitizer::process($value, $schema, $key);
         }
     }
 
-    public function processRuleScalar(): void {
+    private function processRuleScalar(): void {
         if (array_values($this->value) !== $this->value) {
             throw new SanitizerException('Array is not scalar.');
         }
     }
 
-    public function processRuleUnique(): void {
+    private function processRuleUnique(): void {
         if (\count(array_unique($this->value)) !== \count($this->value)) {
             throw new SanitizerException('Values are not unique.');
         }
