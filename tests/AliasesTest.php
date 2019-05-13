@@ -73,4 +73,19 @@ class AliasesTest extends TestCase {
 
         $this->assertNotEquals($modified, SS::alias('integer|maxInt'));
     }
+
+    public function testAliasesPersistence(): void {
+        SS::createAlias('persistentInt', SS::integer(), true);
+        SS::createAlias('nonPersistentInt', SS::integer(), false);
+
+        Sanitizer::process(1, SS::alias('nonPersistentInt'));
+
+        try {
+            SS::alias('nonPersistentInt');
+
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertEquals('Undefined alias with name nonPersistentInt.', $e->getMessage());
+        }
+    }
 }

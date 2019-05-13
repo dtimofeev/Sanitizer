@@ -97,20 +97,31 @@ abstract class SanitizerSchema {
             throw new \InvalidArgumentException("Undefined alias with name $name.");
         }
 
-        return self::$aliases[$name];
+        return self::$aliases[$name]['schema'];
     }
 
     /**
      * @param string $name
      * @param SanitizerSchema $schema
+     * @param bool $persistent
      */
-    final public static function createAlias(string $name, SanitizerSchema $schema): void {
+    final public static function createAlias(string $name, SanitizerSchema $schema, bool $persistent = false): void {
         if (isset(self::$aliases[$name])) {
             throw new \InvalidArgumentException("Schema alias with name $name is already set.");
         }
 
+        self::$aliases[$name] = [
+            'schema'     => $schema,
+            'persistent' => $persistent,
+        ];
+
         $schema->aliased = true;
-        self::$aliases[$name] = $schema;
+    }
+
+    final public static function destroyNonPersistentAliases(): void {
+        foreach (self::$aliases as $index => &$alias) {
+            if (!$alias['persistent']) unset(self::$aliases[$index]);
+        }
     }
 
     /**
