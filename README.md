@@ -33,7 +33,7 @@ $processed = Sanitizer::process($input, SS::arr()->schema([
 
 # Aliases
 
-Aliases allow for a single definition of commonly used sanitization rules. They can be defined via `SS::createAlias(string $name, SanitizerSchema $schema, bool $persistent = true)` and used as normal schema rules `SS::alias($name)` everywhere, no matter the depth. The `$persistent` parameter indicates if the alias should be preserved after first full validation (single call of `Sanitizer::process(...)`).
+Aliases allow for a single definition of commonly used sanitization rules. They can be defined via `SS::createAlias(string $name, SanitizerSchema $schema, bool $persistent = true)` and used as normal schema rules `SS::alias($name)` everywhere, no matter the depth. The `$persistent` parameter indicates if the alias should be preserved after first full validation (single call of `Sanitizer::process(...)`). They can also be destroyed manually via `SS::destroyAlias(string $name)`.
 
 Because of the schemas nature these are also more memory efficient than defining a separate schemas.
 

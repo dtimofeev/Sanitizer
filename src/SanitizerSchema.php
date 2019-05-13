@@ -118,6 +118,17 @@ abstract class SanitizerSchema {
         $schema->aliased = true;
     }
 
+    /**
+     * @param string $name
+     */
+    final public static function destroyAlias(string $name): void {
+        if (!isset(self::$aliases[$name])) {
+            throw new \InvalidArgumentException("Undefined alias with name $name.");
+        }
+
+        unset(self::$aliases[$name]);
+    }
+
     final public static function destroyNonPersistentAliases(): void {
         foreach (self::$aliases as $index => &$alias) {
             if (!$alias['persistent']) unset(self::$aliases[$index]);

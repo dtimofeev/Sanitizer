@@ -88,4 +88,28 @@ class AliasesTest extends TestCase {
             $this->assertEquals('Undefined alias with name nonPersistentInt.', $e->getMessage());
         }
     }
+
+    public function testAliasDestroy(): void {
+        SS::createAlias('persistent', SS::integer(), true);
+        SS::createAlias('temporary', SS::integer(), true);
+
+        SS::destroyAlias('persistent');
+        SS::destroyAlias('temporary');
+
+        try {
+            SS::destroyAlias('persistent');
+
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertEquals('Undefined alias with name persistent.', $e->getMessage());
+        }
+
+        try {
+            SS::destroyAlias('temporary');
+
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertEquals('Undefined alias with name temporary.', $e->getMessage());
+        }
+    }
 }
