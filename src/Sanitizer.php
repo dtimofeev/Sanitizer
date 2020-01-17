@@ -1,8 +1,9 @@
 <?php
 
-namespace sanitizer;
+namespace Sanitizer;
 
-class Sanitizer {
+class Sanitizer
+{
     /**
      * @param mixed $input
      * @param SanitizerSchema $schema
@@ -11,7 +12,8 @@ class Sanitizer {
      * @return mixed
      * @throws SanitizerException
      */
-    public static function process($input, SanitizerSchema $schema, string $field = '$') {
+    public static function process($input, SanitizerSchema $schema, string $field = '$')
+    {
         try {
             $result = $schema->process($input);
         } catch (SanitizerException $e) {

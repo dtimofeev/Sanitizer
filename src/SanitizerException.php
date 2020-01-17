@@ -1,9 +1,9 @@
 <?php
 
-namespace sanitizer;
+namespace Sanitizer;
 
-
-class SanitizerException extends \Exception {
+class SanitizerException extends \Exception
+{
     public const ERR_ARR_INVALID       = 100;
     public const ERR_ARR_SCALAR        = 101;
     public const ERR_ARR_UNIQUE        = 102;
@@ -83,12 +83,14 @@ class SanitizerException extends \Exception {
      * @param string|null $field
      * @param \Throwable|null $previous
      */
-    public function __construct(int $code, array $params = [], string $field = null, \Throwable $previous = null) {
+    public function __construct(int $code, array $params = [], string $field = null, \Throwable $previous = null)
+    {
         if ($previous instanceof SanitizerException) {
             $this->chain = $previous->getChain();
         }
 
         if (isset($field)) $this->chain[] = $field;
+
         $this->params = $params;
 
         $message = '';
@@ -111,14 +113,16 @@ class SanitizerException extends \Exception {
     /**
      * @return array
      */
-    public function getChain(): array {
+    public function getChain(): array
+    {
         return $this->chain;
     }
 
     /**
      * @return array
      */
-    public function getParams(): array {
+    public function getParams(): array
+    {
         return $this->params ?? [];
     }
 
@@ -128,7 +132,8 @@ class SanitizerException extends \Exception {
      *
      * @return string
      */
-    public function getFieldPath(bool $maskIntKeys = false, string $mask = '*'): string {
+    public function getFieldPath(bool $maskIntKeys = false, string $mask = '*'): string
+    {
         $chain = $this->chain;
         if ($maskIntKeys) {
             foreach ($chain as &$field) {

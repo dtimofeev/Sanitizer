@@ -1,11 +1,12 @@
 <?php
 
-namespace sanitizer\schemas;
+namespace Sanitizer\Schemas;
 
-use sanitizer\SanitizerException;
-use sanitizer\SanitizerSchema;
+use Sanitizer\SanitizerException;
+use Sanitizer\SanitizerSchema;
 
-class IntegerSchema extends SanitizerSchema {
+class IntegerSchema extends SanitizerSchema
+{
     private const RULE_MIN        = 'min';
     private const RULE_MAX        = 'max';
     private const RULE_EQUALS     = 'equals';
@@ -18,12 +19,17 @@ class IntegerSchema extends SanitizerSchema {
      *
      * @return int
      */
-    public function process($input): ?int {
+    public function process($input): ?int
+    {
         if (!isset($input) && $this->optional) return $this->default;
-        if (!\is_numeric($input)) throw new SanitizerException(SanitizerException::ERR_INT_INVALID);
+        if (!\is_numeric($input)) {
+            throw new SanitizerException(SanitizerException::ERR_INT_INVALID);
+        }
 
         $this->value = filter_var($input, FILTER_VALIDATE_INT);
-        if ($this->value === false) throw new SanitizerException(SanitizerException::ERR_INT_INVALID);
+        if ($this->value === false) {
+            throw new SanitizerException(SanitizerException::ERR_INT_INVALID);
+        }
 
         foreach ($this->rules as $rule) {
             switch ($rule['type']) {
@@ -58,7 +64,8 @@ class IntegerSchema extends SanitizerSchema {
      *
      * @return IntegerSchema
      */
-    public function optional($default = null): IntegerSchema {
+    public function optional($default = null): IntegerSchema
+    {
         if (isset($default) && !\is_int($default)) {
             throw new \InvalidArgumentException('Trying to set non-integer default value for integer schema.');
         }
@@ -75,7 +82,8 @@ class IntegerSchema extends SanitizerSchema {
      *
      * @return IntegerSchema
      */
-    public function min(int $value): IntegerSchema {
+    public function min(int $value): IntegerSchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type'  => self::RULE_MIN,
@@ -90,7 +98,8 @@ class IntegerSchema extends SanitizerSchema {
      *
      * @return IntegerSchema
      */
-    public function max(int $value): IntegerSchema {
+    public function max(int $value): IntegerSchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type'  => self::RULE_MAX,
@@ -106,7 +115,8 @@ class IntegerSchema extends SanitizerSchema {
      *
      * @return IntegerSchema
      */
-    public function between(int $min, int $max): IntegerSchema {
+    public function between(int $min, int $max): IntegerSchema
+    {
         if ($max < $min) throw new \InvalidArgumentException('Trying to define integer between validation with max < min.');
 
         $self = $this->aliased ? clone $this : $this;
@@ -127,7 +137,8 @@ class IntegerSchema extends SanitizerSchema {
      *
      * @return IntegerSchema
      */
-    public function equals(int $expected): IntegerSchema {
+    public function equals(int $expected): IntegerSchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type'     => self::RULE_EQUALS,
@@ -142,7 +153,8 @@ class IntegerSchema extends SanitizerSchema {
      *
      * @return IntegerSchema
      */
-    public function not(int $unexpected): IntegerSchema {
+    public function not(int $unexpected): IntegerSchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type'       => self::RULE_NOT,
@@ -157,7 +169,8 @@ class IntegerSchema extends SanitizerSchema {
      *
      * @return IntegerSchema
      */
-    public function oneOf(array $values): IntegerSchema {
+    public function oneOf(array $values): IntegerSchema
+    {
         if (empty($values)) {
             throw new \InvalidArgumentException('Values for "oneOf" rule should not be an empty array.');
         }
@@ -176,7 +189,8 @@ class IntegerSchema extends SanitizerSchema {
      *
      * @return IntegerSchema
      */
-    public function notOneOf(array $values): IntegerSchema {
+    public function notOneOf(array $values): IntegerSchema
+    {
         if (empty($values)) {
             throw new \InvalidArgumentException('Values for "notOneOf" rule should not be an empty array.');
         }
@@ -193,21 +207,28 @@ class IntegerSchema extends SanitizerSchema {
     /**
      * @param int $min
      */
-    private function processRuleMin(int $min): void {
-        if ($this->value < $min) throw new SanitizerException(SanitizerException::ERR_INT_MIN, ['value' => $min]);
+    private function processRuleMin(int $min): void
+    {
+        if ($this->value < $min) {
+            throw new SanitizerException(SanitizerException::ERR_INT_MIN, ['value' => $min]);
+        }
     }
 
     /**
      * @param int $max
      */
-    private function processRuleMax(int $max): void {
-        if ($this->value > $max) throw new SanitizerException(SanitizerException::ERR_INT_MAX, ['value' => $max]);
+    private function processRuleMax(int $max): void
+    {
+        if ($this->value > $max) {
+            throw new SanitizerException(SanitizerException::ERR_INT_MAX, ['value' => $max]);
+        }
     }
 
     /**
      * @param int $expected
      */
-    private function processRuleEquals(int $expected): void {
+    private function processRuleEquals(int $expected): void
+    {
         if ($this->value !== $expected) {
             throw new SanitizerException(SanitizerException::ERR_INT_EQUALS, ['value' => $expected]);
         }
@@ -216,7 +237,8 @@ class IntegerSchema extends SanitizerSchema {
     /**
      * @param int $unexpected
      */
-    private function processRuleNot(int $unexpected): void {
+    private function processRuleNot(int $unexpected): void
+    {
         if ($this->value === $unexpected) {
             throw new SanitizerException(SanitizerException::ERR_INT_NOT_EQUALS, ['value' => $unexpected]);
         }
@@ -225,7 +247,8 @@ class IntegerSchema extends SanitizerSchema {
     /**
      * @param array $values
      */
-    private function processRuleOneOf(array $values): void {
+    private function processRuleOneOf(array $values): void
+    {
         if (!\in_array($this->value, $values, true)) {
             throw new SanitizerException(SanitizerException::ERR_INT_ONE_OF , ['values' => $values]);
         }
@@ -234,7 +257,8 @@ class IntegerSchema extends SanitizerSchema {
     /**
      * @param array $values
      */
-    private function processRuleNotOneOf(array $values): void {
+    private function processRuleNotOneOf(array $values): void
+    {
         if (\in_array($this->value, $values, true)) {
             throw new SanitizerException(SanitizerException::ERR_INT_NOT_ONE_OF, ['values' => $values]);
         }

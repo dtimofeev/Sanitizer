@@ -1,12 +1,13 @@
 <?php
 
-namespace sanitizer\schemas;
+namespace Sanitizer\Schemas;
 
-use sanitizer\Sanitizer;
-use sanitizer\SanitizerException;
-use sanitizer\SanitizerSchema;
+use Sanitizer\Sanitizer;
+use Sanitizer\SanitizerException;
+use Sanitizer\SanitizerSchema;
 
-class ArraySchema extends SanitizerSchema {
+class ArraySchema extends SanitizerSchema
+{
     private const RULE_SCHEMAS = 'schemas';
     private const RULE_SCALAR  = 'scalar';
     private const RULE_UNIQUE  = 'unique';
@@ -20,9 +21,12 @@ class ArraySchema extends SanitizerSchema {
      * @return array|null
      * @throws SanitizerException
      */
-    public function process($input): ?array {
+    public function process($input): ?array
+    {
         if ((!isset($input) || empty($input)) && $this->optional) return $this->default;
-        if (!\is_array($input)) throw new SanitizerException(SanitizerException::ERR_ARR_INVALID);
+        if (!\is_array($input)) {
+            throw new SanitizerException(SanitizerException::ERR_ARR_INVALID);
+        }
 
         $this->value = $input;
         foreach ($this->rules as $rule) {
@@ -58,7 +62,8 @@ class ArraySchema extends SanitizerSchema {
      *
      * @return ArraySchema
      */
-    public function optional($default = null): ArraySchema {
+    public function optional($default = null): ArraySchema
+    {
         if (isset($default) && !\is_array($default)) {
             throw new \InvalidArgumentException('Trying to set non-array default value for array schema.');
         }
@@ -75,7 +80,8 @@ class ArraySchema extends SanitizerSchema {
      *
      * @return ArraySchema
      */
-    public function schema(array $schema): ArraySchema {
+    public function schema(array $schema): ArraySchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type'   => self::RULE_SCHEMAS,
@@ -85,7 +91,8 @@ class ArraySchema extends SanitizerSchema {
         return $self;
     }
 
-    public function scalar(): ArraySchema {
+    public function scalar(): ArraySchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type' => self::RULE_SCALAR,
@@ -94,7 +101,8 @@ class ArraySchema extends SanitizerSchema {
         return $self;
     }
 
-    public function unique(): ArraySchema {
+    public function unique(): ArraySchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type' => self::RULE_UNIQUE,
@@ -108,7 +116,8 @@ class ArraySchema extends SanitizerSchema {
      *
      * @return ArraySchema
      */
-    public function each(SanitizerSchema $schema): ArraySchema {
+    public function each(SanitizerSchema $schema): ArraySchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type'   => self::RULE_EACH,
@@ -123,7 +132,8 @@ class ArraySchema extends SanitizerSchema {
      *
      * @return ArraySchema
      */
-    public function min(int $length): ArraySchema {
+    public function min(int $length): ArraySchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type' => self::RULE_MIN,
@@ -138,7 +148,8 @@ class ArraySchema extends SanitizerSchema {
      *
      * @return ArraySchema
      */
-    public function max(int $length): ArraySchema {
+    public function max(int $length): ArraySchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type' => self::RULE_MAX,
@@ -151,7 +162,8 @@ class ArraySchema extends SanitizerSchema {
     /**
      * @param array $schema
      */
-    private function processRuleSchema(array $schema): void {
+    private function processRuleSchema(array $schema): void
+    {
         foreach ($schema as $key => $rules) {
             $this->value[$key] = Sanitizer::process($this->value[$key] ?? null, $rules, $key);
         }
@@ -160,31 +172,36 @@ class ArraySchema extends SanitizerSchema {
     /**
      * @param SanitizerSchema $schema
      */
-    private function processRuleEach(SanitizerSchema $schema): void {
+    private function processRuleEach(SanitizerSchema $schema): void
+    {
         foreach ($this->value as $key => &$value) {
             $value = Sanitizer::process($value, $schema, $key);
         }
     }
 
-    private function processRuleScalar(): void {
+    private function processRuleScalar(): void
+    {
         if (array_values($this->value) !== $this->value) {
             throw new SanitizerException(SanitizerException::ERR_ARR_SCALAR);
         }
     }
 
-    private function processRuleUnique(): void {
+    private function processRuleUnique(): void
+    {
         if (\count(array_unique($this->value)) !== \count($this->value)) {
             throw new SanitizerException(SanitizerException::ERR_ARR_UNIQUE);
         }
     }
 
-    private function processRuleMin(int $min): void {
+    private function processRuleMin(int $min): void
+    {
         if (\count($this->value) < $min) {
             throw new SanitizerException(SanitizerException::ERR_ARR_MIN, ['min' => $min]);
         }
     }
 
-    private function processRuleMax(int $max): void {
+    private function processRuleMax(int $max): void
+    {
         if (\count($this->value) > $max) {
             throw new SanitizerException(SanitizerException::ERR_ARR_MAX, ['max' => $max]);
         }

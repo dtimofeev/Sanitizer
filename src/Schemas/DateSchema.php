@@ -1,11 +1,12 @@
 <?php
 
-namespace sanitizer\schemas;
+namespace Sanitizer\Schemas;
 
-use sanitizer\SanitizerException;
-use sanitizer\SanitizerSchema;
+use Sanitizer\SanitizerException;
+use Sanitizer\SanitizerSchema;
 
-class DateSchema extends SanitizerSchema {
+class DateSchema extends SanitizerSchema
+{
     private const RULE_BEFORE = 'before';
     private const RULE_AFTER  = 'after';
 
@@ -17,7 +18,8 @@ class DateSchema extends SanitizerSchema {
      *
      * @param string $format
      */
-    public function __construct(string $format) {
+    public function __construct(string $format)
+    {
         $this->format = $format;
     }
 
@@ -27,9 +29,12 @@ class DateSchema extends SanitizerSchema {
      * @return mixed
      * @throws SanitizerException
      */
-    public function process($input): string {
+    public function process($input): string
+    {
         if (!isset($input) && $this->optional) return $this->default;
-        if (!is_scalar($input)) throw new SanitizerException(SanitizerException::ERR_DATE_INVALID);
+        if (!is_scalar($input)) {
+            throw new SanitizerException(SanitizerException::ERR_DATE_INVALID);
+        }
 
         $this->value = \DateTime::createFromFormat($this->format, $input);
         if (!$this->value || $this->value->format($this->format) !== $input) {
@@ -57,7 +62,8 @@ class DateSchema extends SanitizerSchema {
      *
      * @return DateSchema
      */
-    public function optional($default = null): DateSchema {
+    public function optional($default = null): DateSchema
+    {
         if (isset($default)) {
             if (!\is_string($default)) {
                 throw new \InvalidArgumentException('Trying to set non-date default value for date schema.');
@@ -81,7 +87,8 @@ class DateSchema extends SanitizerSchema {
      *
      * @return DateSchema
      */
-    public function before(string $date): DateSchema {
+    public function before(string $date): DateSchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type' => self::RULE_BEFORE,
@@ -96,7 +103,8 @@ class DateSchema extends SanitizerSchema {
      *
      * @return DateSchema
      */
-    public function after(string $date): DateSchema {
+    public function after(string $date): DateSchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type' => self::RULE_AFTER,
@@ -109,7 +117,8 @@ class DateSchema extends SanitizerSchema {
     /**
      * @param string $date
      */
-    private function processRuleBefore(string $date): void {
+    private function processRuleBefore(string $date): void
+    {
         if ($this->value >= new \DateTime($date)) {
             throw new SanitizerException(SanitizerException::ERR_DATE_BEFORE, ['date' => $date]);
         }
@@ -118,7 +127,8 @@ class DateSchema extends SanitizerSchema {
     /**
      * @param string $date
      */
-    private function processRuleAfter(string $date): void {
+    private function processRuleAfter(string $date): void
+    {
         if ($this->value <= new \DateTime($date)) {
             throw new SanitizerException(SanitizerException::ERR_DATE_AFTER, ['date' => $date]);
         }

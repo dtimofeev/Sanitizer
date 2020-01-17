@@ -1,16 +1,18 @@
 <?php
 
-namespace sanitizer\tests;
+namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-use sanitizer\Sanitizer;
-use sanitizer\SanitizerException;
-use sanitizer\SanitizerSchema;
-use sanitizer\SanitizerSchema as SS;
-use sanitizer\schemas\StringSchema;
+use Sanitizer\Sanitizer;
+use Sanitizer\SanitizerException;
+use Sanitizer\SanitizerSchema;
+use Sanitizer\SanitizerSchema as SS;
+use Sanitizer\Schemas\StringSchema;
 
-class StringTest extends TestCase {
-    public function testIsInstanceOfSanitizerSchema(): void {
+class StringTest extends TestCase
+{
+    public function testIsInstanceOfSanitizerSchema(): void
+    {
         $this->assertInstanceOf(
             SanitizerSchema::class,
             new StringSchema()
@@ -23,14 +25,16 @@ class StringTest extends TestCase {
      *
      * @dataProvider validCasesProvider
      */
-    public function testValidValues($value, $expected = null): void {
+    public function testValidValues($value, $expected = null): void
+    {
         $this->assertEquals($expected ?? $value, Sanitizer::process($value, SS::string()));
     }
 
     /**
      * @return array
      */
-    public function validCasesProvider(): array {
+    public function validCasesProvider(): array
+    {
         return [
             'Value string "test"' => ['test'],
             'Value string "123"'  => ['123'],
@@ -40,7 +44,8 @@ class StringTest extends TestCase {
         ];
     }
 
-    public function testRuleTrim(): void {
+    public function testRuleTrim(): void
+    {
         $this->assertEquals('test  ', Sanitizer::process('  test  ', SS::string()->trim(true, false)));
         $this->assertEquals('  test', Sanitizer::process('  test  ', SS::string()->trim(false, true)));
         $this->assertEquals('test', Sanitizer::process('  test  ', SS::string()->trim()));
@@ -53,7 +58,8 @@ class StringTest extends TestCase {
         }
     }
 
-    public function testRuleLength(): void {
+    public function testRuleLength(): void
+    {
         Sanitizer::process('test', SS::string()->length(4));
 
         try {
@@ -75,7 +81,8 @@ class StringTest extends TestCase {
         }
     }
 
-    public function testRuleMin(): void {
+    public function testRuleMin(): void
+    {
         Sanitizer::process('test', SS::string()->min(4));
 
         try {
@@ -89,7 +96,8 @@ class StringTest extends TestCase {
         }
     }
 
-    public function testRuleMax(): void {
+    public function testRuleMax(): void
+    {
         Sanitizer::process('test', SS::string()->max(4));
 
         try {
@@ -103,7 +111,8 @@ class StringTest extends TestCase {
         }
     }
 
-    public function testRuleOneOf(): void {
+    public function testRuleOneOf(): void
+    {
         Sanitizer::process('success', SS::string()->oneOf(['success', 'error']));
 
         try {
@@ -117,7 +126,8 @@ class StringTest extends TestCase {
         }
     }
 
-    public function testRuleNotOneOf(): void {
+    public function testRuleNotOneOf(): void
+    {
         Sanitizer::process('unknown', SS::string()->notOneOf(['success', 'error']));
 
         try {
@@ -131,7 +141,8 @@ class StringTest extends TestCase {
         }
     }
 
-    public function testRuleEmail(): void {
+    public function testRuleEmail(): void
+    {
         Sanitizer::process('firstname.lastname@mailprovider.org', SS::string()->email());
 
         try {
@@ -153,7 +164,8 @@ class StringTest extends TestCase {
         }
     }
 
-    public function testRuleIp(): void {
+    public function testRuleIp(): void
+    {
         Sanitizer::process('127.0.0.1', SS::string()->ip());
         Sanitizer::process('255.255.255.255', SS::string()->ip());
         Sanitizer::process('1200:0000:AB00:1234:0000:2552:7777:1313', SS::string()->ip(true, true));
@@ -178,7 +190,8 @@ class StringTest extends TestCase {
         }
     }
 
-    public function testRuleUrl(): void {
+    public function testRuleUrl(): void
+    {
         Sanitizer::process('http://site.org', SS::string()->url());
         Sanitizer::process('https://site.org', SS::string()->url());
         Sanitizer::process('https://site.org', SS::string()->url(true));
@@ -194,7 +207,8 @@ class StringTest extends TestCase {
         }
     }
 
-    public function testRuleAlpha(): void {
+    public function testRuleAlpha(): void
+    {
         Sanitizer::process('test', SS::string()->alpha());
         Sanitizer::process('test-', SS::string()->alpha(true));
         Sanitizer::process('test_', SS::string()->alpha(true));
@@ -219,7 +233,8 @@ class StringTest extends TestCase {
         }
     }
 
-    public function testRuleAlphaNum(): void {
+    public function testRuleAlphaNum(): void
+    {
         Sanitizer::process('test', SS::string()->alphaNum());
         Sanitizer::process('test1', SS::string()->alphaNum());
         Sanitizer::process('test1', SS::string()->alphaNum());
@@ -246,7 +261,8 @@ class StringTest extends TestCase {
         }
     }
 
-    public function testRuleRegex(): void {
+    public function testRuleRegex(): void
+    {
         $this->assertEquals('#d3d3d3', Sanitizer::process('#d3d3d3', SS::string()->regex('#[a-f0-9]{6}')));
     }
 

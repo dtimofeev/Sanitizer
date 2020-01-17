@@ -1,16 +1,16 @@
 <?php
 
-namespace sanitizer\tests;
+namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-use sanitizer\Sanitizer;
-use sanitizer\SanitizerException;
-use sanitizer\SanitizerSchema;
-use sanitizer\SanitizerSchema as SS;
-use sanitizer\schemas\BooleanSchema;
+use Sanitizer\Sanitizer;
+use Sanitizer\SanitizerException;
+use Sanitizer\SanitizerSchema as SS;
 
-class ComplexTest extends TestCase {
-    public function testExampleFromReadme(): void {
+class ComplexTest extends TestCase
+{
+    public function testExampleFromReadme(): void
+    {
         $input = [
             'id'        => 111,
             'nickname'  => 'userNickname',
@@ -44,7 +44,8 @@ class ComplexTest extends TestCase {
         ]), $processed);
     }
 
-    public function testErrorPath(): void {
+    public function testErrorPath(): void
+    {
         $input = [
             'favMovies' => [
                 ['title' => 'Doctor Strange', 'tags' => ['marvel ', 'magic']],
@@ -73,7 +74,8 @@ class ComplexTest extends TestCase {
         }
     }
 
-    public function testCustomErrorMessages(): void {
+    public function testCustomErrorMessages(): void
+    {
         SanitizerException::$messages[SanitizerException::ERR_INT_EQUALS] .= '__MODIFIED__';
 
         try {

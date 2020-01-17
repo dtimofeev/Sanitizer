@@ -6,8 +6,8 @@ Simple data sanitization library for PHP 7.1+ without any external library depen
 
 # Usage
 ```php
-use sanitizer\Sanitizer;
-use sanitizer\SanitizerSchema as SS;
+use Sanitizer\Sanitizer;
+use Sanitizer\SanitizerSchema as SS;
 
 // Single element
 $processed = Sanitezer::process(true, SS::boolean());

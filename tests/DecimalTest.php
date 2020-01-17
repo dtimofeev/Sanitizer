@@ -1,23 +1,26 @@
 <?php
 
-namespace sanitizer\tests;
+namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-use sanitizer\Sanitizer;
-use sanitizer\SanitizerException;
-use sanitizer\SanitizerSchema;
-use sanitizer\SanitizerSchema as SS;
-use sanitizer\schemas\DecimalSchema;
+use Sanitizer\Sanitizer;
+use Sanitizer\SanitizerException;
+use Sanitizer\SanitizerSchema;
+use Sanitizer\SanitizerSchema as SS;
+use Sanitizer\Schemas\DecimalSchema;
 
-class DecimalTest extends TestCase {
-    public function testIsInstanceOfSanitizerSchema(): void {
+class DecimalTest extends TestCase
+{
+    public function testIsInstanceOfSanitizerSchema(): void
+    {
         $this->assertInstanceOf(
             SanitizerSchema::class,
             new DecimalSchema()
         );
     }
 
-    public function testBasic(): void {
+    public function testBasic(): void
+    {
         $this->assertEquals('1', Sanitizer::process('1', SS::decimal()));
         $this->assertEquals('1.01', Sanitizer::process('1.01', SS::decimal()));
         $this->assertEquals('1.01', Sanitizer::process(1.01, SS::decimal()));
@@ -37,7 +40,8 @@ class DecimalTest extends TestCase {
         }
     }
 
-    public function testRuleMin(): void {
+    public function testRuleMin(): void
+    {
         foreach ([9, 9.01, '9', '9.01'] as $case) {
             $this->assertEquals(10, Sanitizer::process(10, SS::decimal()->min($case)));
         }
@@ -54,7 +58,8 @@ class DecimalTest extends TestCase {
         }
     }
 
-    public function testRuleMax(): void {
+    public function testRuleMax(): void
+    {
         foreach ([11, 11.01, '11', '11.01'] as $case) {
             $this->assertEquals(10, Sanitizer::process(10, SS::decimal()->max($case)));
         }
@@ -71,7 +76,8 @@ class DecimalTest extends TestCase {
         }
     }
 
-    public function testOptional(): void {
+    public function testOptional(): void
+    {
         $this->assertEquals(1, Sanitizer::process(null, SS::decimal()->optional(1)));
 
         foreach ([

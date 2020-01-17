@@ -1,16 +1,15 @@
 <?php
 
-namespace sanitizer\tests;
+namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-use sanitizer\Sanitizer;
-use sanitizer\SanitizerException;
-use sanitizer\SanitizerSchema;
-use sanitizer\SanitizerSchema as SS;
-use sanitizer\schemas\BooleanSchema;
+use Sanitizer\Sanitizer;
+use Sanitizer\SanitizerSchema as SS;
 
-class AliasesTest extends TestCase {
-    public function testExampleFromReadmeWithAliases(): void {
+class AliasesTest extends TestCase
+{
+    public function testExampleFromReadmeWithAliases(): void
+    {
         $input = [
             'id'        => 111,
             'nickname'  => 'userNickname',
@@ -44,7 +43,8 @@ class AliasesTest extends TestCase {
         ]), $processed);
     }
 
-    public function testAliasErrors(): void {
+    public function testAliasErrors(): void
+    {
         SS::createAlias('integer', SS::integer());
 
         try {
@@ -66,7 +66,8 @@ class AliasesTest extends TestCase {
         }
     }
 
-    public function testAliasExtend(): void {
+    public function testAliasExtend(): void
+    {
         SS::createAlias('integer|maxInt', SS::integer()->equals(PHP_INT_MAX));
 
         $modified = SS::alias('integer|maxInt')->optional(null);
@@ -74,7 +75,8 @@ class AliasesTest extends TestCase {
         $this->assertNotEquals($modified, SS::alias('integer|maxInt'));
     }
 
-    public function testAliasesPersistence(): void {
+    public function testAliasesPersistence(): void
+    {
         SS::createAlias('persistentInt', SS::integer(), true);
         SS::createAlias('nonPersistentInt', SS::integer(), false);
 
@@ -89,7 +91,8 @@ class AliasesTest extends TestCase {
         }
     }
 
-    public function testAliasDestroy(): void {
+    public function testAliasDestroy(): void
+    {
         SS::createAlias('persistent', SS::integer(), true);
         SS::createAlias('temporary', SS::integer(), true);
 

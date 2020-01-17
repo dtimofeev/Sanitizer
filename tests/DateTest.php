@@ -1,23 +1,26 @@
 <?php
 
-namespace sanitizer\tests;
+namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-use sanitizer\Sanitizer;
-use sanitizer\SanitizerException;
-use sanitizer\SanitizerSchema;
-use sanitizer\SanitizerSchema as SS;
-use sanitizer\schemas\DateSchema;
+use Sanitizer\Sanitizer;
+use Sanitizer\SanitizerException;
+use Sanitizer\SanitizerSchema;
+use Sanitizer\SanitizerSchema as SS;
+use Sanitizer\Schemas\DateSchema;
 
-class DateTest extends TestCase {
-    public function testIsInstanceOfSanitizerSchema(): void {
+class DateTest extends TestCase
+{
+    public function testIsInstanceOfSanitizerSchema(): void
+    {
         $this->assertInstanceOf(
             SanitizerSchema::class,
             new DateSchema('Y-m-d H:i:s')
         );
     }
 
-    public function testDateCreate(): void {
+    public function testDateCreate(): void
+    {
         foreach ([
             ['value' => '2019-01-01 10:00:02', 'format' => 'Y-m-d H:i:s'],
             ['value' => '2019-01-01 10:00', 'format' => 'Y-m-d H:i'],
@@ -47,7 +50,8 @@ class DateTest extends TestCase {
         }
     }
 
-    public function testOptional(): void {
+    public function testOptional(): void
+    {
         $valid = '2019-01-01 10:00:00';
         $this->assertEquals($valid, Sanitizer::process(null, SS::date('Y-m-d H:i:s')->optional($valid)));
 
@@ -67,7 +71,8 @@ class DateTest extends TestCase {
         }
     }
 
-    public function testRuleBefore(): void {
+    public function testRuleBefore(): void
+    {
         $input = '2019-01-01 10:00:02';
         $before = '2019-01-01 10:00:03';
 
@@ -89,7 +94,8 @@ class DateTest extends TestCase {
         }
     }
 
-    public function testRuleAfter(): void {
+    public function testRuleAfter(): void
+    {
         $input = '2019-01-01 10:00:02';
         $after = '2019-01-01 10:00:01';
 

@@ -1,23 +1,26 @@
 <?php
 
-namespace sanitizer\tests;
+namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-use sanitizer\Sanitizer;
-use sanitizer\SanitizerException;
-use sanitizer\SanitizerSchema;
-use sanitizer\SanitizerSchema as SS;
-use sanitizer\schemas\ArraySchema;
+use Sanitizer\Sanitizer;
+use Sanitizer\SanitizerException;
+use Sanitizer\SanitizerSchema;
+use Sanitizer\SanitizerSchema as SS;
+use Sanitizer\Schemas\ArraySchema;
 
-class ArrayTest extends TestCase {
-    public function testIsInstanceOfSanitizerSchema(): void {
+class ArrayTest extends TestCase
+{
+    public function testIsInstanceOfSanitizerSchema(): void
+    {
         $this->assertInstanceOf(
             SanitizerSchema::class,
             new ArraySchema()
         );
     }
 
-    public function testBasicAssocArray(): void {
+    public function testBasicAssocArray(): void
+    {
         $input = [
             'key' => 'value',
         ];
@@ -36,7 +39,8 @@ class ArrayTest extends TestCase {
         }
     }
 
-    public function testOptional(): void {
+    public function testOptional(): void
+    {
         $valid = [
             'key' => 'value'
         ];
@@ -59,7 +63,8 @@ class ArrayTest extends TestCase {
         }
     }
 
-    public function testRuleScalar(): void {
+    public function testRuleScalar(): void
+    {
         foreach ([
             [1, 1, 1],
             [1, 'test', true],
@@ -79,7 +84,8 @@ class ArrayTest extends TestCase {
         }
     }
 
-    public function testRuleUnique(): void {
+    public function testRuleUnique(): void
+    {
         foreach ([
             [1, 2, 3],
             ['test', 'test2'],
@@ -106,7 +112,8 @@ class ArrayTest extends TestCase {
         }
     }
 
-    public function testRuleEach(): void {
+    public function testRuleEach(): void
+    {
         $input = [
             'test1' => 1,
             'test2' => 2,
@@ -117,7 +124,8 @@ class ArrayTest extends TestCase {
         )));
     }
 
-    public function testRuleSchema(): void {
+    public function testRuleSchema(): void
+    {
         $input = [
             'ip'       => '127.0.0.1',
             'nickname' => 'user nickname-1',
@@ -133,7 +141,8 @@ class ArrayTest extends TestCase {
         ])));
     }
 
-    public function testRuleMin(): void {
+    public function testRuleMin(): void
+    {
         $input = ['key' => 'value', 'key2' => 'value2'];
         $this->assertEquals($input, Sanitizer::process($input, SS::arr()->min(1)));
 
@@ -147,7 +156,8 @@ class ArrayTest extends TestCase {
         }
     }
 
-    public function testRuleMax(): void {
+    public function testRuleMax(): void
+    {
         $input = ['key' => 'value', 'key2' => 'value2'];
         $this->assertEquals($input, Sanitizer::process($input, SS::arr()->max(3)));
 

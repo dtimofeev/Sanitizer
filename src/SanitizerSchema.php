@@ -1,15 +1,16 @@
 <?php
 
-namespace sanitizer;
+namespace Sanitizer;
 
-use sanitizer\schemas\ArraySchema;
-use sanitizer\schemas\BooleanSchema;
-use sanitizer\schemas\DateSchema;
-use sanitizer\schemas\DecimalSchema;
-use sanitizer\schemas\IntegerSchema;
-use sanitizer\schemas\StringSchema;
+use Sanitizer\Schemas\ArraySchema;
+use Sanitizer\Schemas\BooleanSchema;
+use Sanitizer\Schemas\DateSchema;
+use Sanitizer\Schemas\DecimalSchema;
+use Sanitizer\Schemas\IntegerSchema;
+use Sanitizer\Schemas\StringSchema;
 
-abstract class SanitizerSchema {
+abstract class SanitizerSchema
+{
     /** @var mixed */
     protected $default;
 
@@ -46,28 +47,32 @@ abstract class SanitizerSchema {
     /**
      * @return BooleanSchema
      */
-    final public static function boolean(): BooleanSchema {
+    final public static function boolean(): BooleanSchema
+    {
         return new BooleanSchema();
     }
 
     /**
      * @return IntegerSchema
      */
-    final public static function integer(): IntegerSchema {
+    final public static function integer(): IntegerSchema
+    {
         return new IntegerSchema();
     }
 
     /**
      * @return StringSchema
      */
-    final public static function string(): StringSchema {
+    final public static function string(): StringSchema
+    {
         return new StringSchema();
     }
 
     /**
      * @return ArraySchema
      */
-    final public static function arr(): ArraySchema {
+    final public static function arr(): ArraySchema
+    {
         return new ArraySchema();
     }
 
@@ -76,14 +81,16 @@ abstract class SanitizerSchema {
      *
      * @return DateSchema
      */
-    final public static function date(string $format): DateSchema {
+    final public static function date(string $format): DateSchema
+    {
         return new DateSchema($format);
     }
 
     /**
      * @return DecimalSchema
      */
-    final public static function decimal(): DecimalSchema {
+    final public static function decimal(): DecimalSchema
+    {
         return new DecimalSchema();
     }
 
@@ -92,7 +99,8 @@ abstract class SanitizerSchema {
      *
      * @return ArraySchema|BooleanSchema|DateSchema|IntegerSchema|StringSchema
      */
-    final public static function alias(string $name): SanitizerSchema {
+    final public static function alias(string $name): SanitizerSchema
+    {
         if (!isset(self::$aliases[$name])) {
             throw new \InvalidArgumentException("Undefined alias with name $name.");
         }
@@ -105,7 +113,8 @@ abstract class SanitizerSchema {
      * @param SanitizerSchema $schema
      * @param bool $persistent
      */
-    final public static function createAlias(string $name, SanitizerSchema $schema, bool $persistent = false): void {
+    final public static function createAlias(string $name, SanitizerSchema $schema, bool $persistent = false): void
+    {
         if (isset(self::$aliases[$name])) {
             throw new \InvalidArgumentException("Schema alias with name $name is already set.");
         }
@@ -121,7 +130,8 @@ abstract class SanitizerSchema {
     /**
      * @param string $name
      */
-    final public static function destroyAlias(string $name): void {
+    final public static function destroyAlias(string $name): void
+    {
         if (!isset(self::$aliases[$name])) {
             throw new \InvalidArgumentException("Undefined alias with name $name.");
         }
@@ -129,7 +139,8 @@ abstract class SanitizerSchema {
         unset(self::$aliases[$name]);
     }
 
-    final public static function destroyNonPersistentAliases(): void {
+    final public static function destroyNonPersistentAliases(): void
+    {
         foreach (self::$aliases as $index => &$alias) {
             if (!$alias['persistent']) unset(self::$aliases[$index]);
         }
@@ -138,7 +149,8 @@ abstract class SanitizerSchema {
     /**
      * Used to remove aliased property for cloned object.
      */
-    final public function __clone() {
+    final public function __clone()
+    {
         $this->aliased = false;
     }
 }

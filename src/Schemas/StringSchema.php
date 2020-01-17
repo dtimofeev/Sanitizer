@@ -1,11 +1,12 @@
 <?php
 
-namespace sanitizer\schemas;
+namespace Sanitizer\Schemas;
 
-use sanitizer\SanitizerException;
-use sanitizer\SanitizerSchema;
+use Sanitizer\SanitizerException;
+use Sanitizer\SanitizerSchema;
 
-class StringSchema extends SanitizerSchema {
+class StringSchema extends SanitizerSchema
+{
     private const RULE_TRIM       = 'trim';
     private const RULE_LENGTH     = 'length';
     private const RULE_REGEX      = 'regex';
@@ -20,7 +21,8 @@ class StringSchema extends SanitizerSchema {
      *
      * @return string
      */
-    public function process($input): ?string {
+    public function process($input): ?string
+    {
         if (!isset($input) && $this->optional) return $this->default;
 
         $this->value = filter_var($input, FILTER_SANITIZE_STRING);
@@ -65,7 +67,8 @@ class StringSchema extends SanitizerSchema {
      *
      * @return StringSchema
      */
-    public function optional($default = null): StringSchema {
+    public function optional($default = null): StringSchema
+    {
         if (isset($default) && !\is_string($default)) {
             throw new \InvalidArgumentException('Trying to set non-string default value for string schema.');
         }
@@ -83,7 +86,8 @@ class StringSchema extends SanitizerSchema {
      *
      * @return StringSchema
      */
-    public function trim(bool $left = true, bool $right = true): StringSchema {
+    public function trim(bool $left = true, bool $right = true): StringSchema
+    {
         if (!$left && !$right) {
             throw new \InvalidArgumentException('Trying to define string trim rule with both left & right disabled.');
         }
@@ -104,7 +108,8 @@ class StringSchema extends SanitizerSchema {
      *
      * @return StringSchema
      */
-    public function length(int $length, string $charset = 'UTF-8'): StringSchema {
+    public function length(int $length, string $charset = 'UTF-8'): StringSchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type'    => self::RULE_LENGTH,
@@ -122,7 +127,8 @@ class StringSchema extends SanitizerSchema {
      *
      * @return StringSchema
      */
-    public function min(int $length, string $charset = 'UTF-8'): StringSchema {
+    public function min(int $length, string $charset = 'UTF-8'): StringSchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type'    => self::RULE_LENGTH,
@@ -140,7 +146,8 @@ class StringSchema extends SanitizerSchema {
      *
      * @return StringSchema
      */
-    public function max(int $length, string $charset = 'UTF-8'): StringSchema {
+    public function max(int $length, string $charset = 'UTF-8'): StringSchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type'    => self::RULE_LENGTH,
@@ -158,7 +165,8 @@ class StringSchema extends SanitizerSchema {
      *
      * @return StringSchema
      */
-    public function oneOf(array $values, bool $strict = true): StringSchema {
+    public function oneOf(array $values, bool $strict = true): StringSchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type'   => self::RULE_ONE_OF,
@@ -175,7 +183,8 @@ class StringSchema extends SanitizerSchema {
      *
      * @return StringSchema
      */
-    public function notOneOf(array $values, bool $strict = true): StringSchema {
+    public function notOneOf(array $values, bool $strict = true): StringSchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type'   => self::RULE_NOT_ONE_OF,
@@ -189,7 +198,8 @@ class StringSchema extends SanitizerSchema {
     /**
      * @return StringSchema
      */
-    public function email(): StringSchema {
+    public function email(): StringSchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type' => self::RULE_EMAIL,
@@ -204,7 +214,8 @@ class StringSchema extends SanitizerSchema {
      *
      * @return StringSchema
      */
-    public function ip(bool $v4 = true, bool $v6 = false): StringSchema {
+    public function ip(bool $v4 = true, bool $v6 = false): StringSchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type' => self::RULE_IP,
@@ -220,7 +231,8 @@ class StringSchema extends SanitizerSchema {
      *
      * @return StringSchema
      */
-    public function url(bool $httpsOnly = false): StringSchema {
+    public function url(bool $httpsOnly = false): StringSchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type'      => self::RULE_URL,
@@ -236,7 +248,8 @@ class StringSchema extends SanitizerSchema {
      *
      * @return StringSchema
      */
-    public function regex(string $pattern, string $name = null): StringSchema {
+    public function regex(string $pattern, string $name = null): StringSchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type'    => self::RULE_REGEX,
@@ -253,7 +266,8 @@ class StringSchema extends SanitizerSchema {
      *
      * @return StringSchema
      */
-    public function alpha(bool $dash = false, bool $space = false): StringSchema {
+    public function alpha(bool $dash = false, bool $space = false): StringSchema
+    {
         return $this->regex('([' . ($space ? ' ' : '') . 'a-zA-Z' . ($dash ? '_-' : '') . '])+', 'alpha');
     }
 
@@ -263,7 +277,8 @@ class StringSchema extends SanitizerSchema {
      *
      * @return StringSchema
      */
-    public function alphaNum(bool $dash = false, bool $space = false): StringSchema {
+    public function alphaNum(bool $dash = false, bool $space = false): StringSchema
+    {
         return $this->regex('([' . ($space ? ' ' : '') . 'a-zA-Z0-9' . ($dash ? '_-' : '') . '])+', 'alphaNum');
     }
 
@@ -271,7 +286,8 @@ class StringSchema extends SanitizerSchema {
      * @param bool $left
      * @param bool $right
      */
-    private function processRuleTrim(bool $left, bool $right): void {
+    private function processRuleTrim(bool $left, bool $right): void
+    {
         if ($left && $right) {
             $this->value = trim($this->value);
         } elseif ($left) {
@@ -286,7 +302,8 @@ class StringSchema extends SanitizerSchema {
      * @param int|null $max
      * @param string $charset
      */
-    private function processRuleLength(?int $min, ?int $max, string $charset): void {
+    private function processRuleLength(?int $min, ?int $max, string $charset): void
+    {
         $length = mb_strlen($this->value, $charset);
         if ($min !== null && $length < $min) {
             throw new SanitizerException(SanitizerException::ERR_STR_MIN, ['min' => $min]);
@@ -300,7 +317,8 @@ class StringSchema extends SanitizerSchema {
      * @param array $values
      * @param bool $strict
      */
-    private function processRuleOneOf(array $values, bool $strict): void {
+    private function processRuleOneOf(array $values, bool $strict): void
+    {
         if (!\in_array($this->value, $values, $strict)) {
             throw new SanitizerException(SanitizerException::ERR_STR_ONE_OF, ['values' => $values]);
         }
@@ -310,13 +328,15 @@ class StringSchema extends SanitizerSchema {
      * @param array $values
      * @param bool $strict
      */
-    private function processRuleNotOneOf(array $values, bool $strict): void {
+    private function processRuleNotOneOf(array $values, bool $strict): void
+    {
         if (\in_array($this->value, $values, $strict)) {
             throw new SanitizerException(SanitizerException::ERR_STR_NOT_ONE_OF, ['values' => $values]);
         }
     }
 
-    private function processRuleEmail(): void {
+    private function processRuleEmail(): void
+    {
         if (!filter_var($this->value, FILTER_VALIDATE_EMAIL)) {
             throw new SanitizerException(SanitizerException::ERR_STR_EMAIL);
         }
@@ -326,7 +346,8 @@ class StringSchema extends SanitizerSchema {
      * @param bool $v4
      * @param bool $v6
      */
-    private function processRuleIP(bool $v4, bool $v6): void {
+    private function processRuleIP(bool $v4, bool $v6): void
+    {
         $flags = 0;
         if ($v4) $flags |= FILTER_FLAG_IPV4;
         if ($v6) $flags |= FILTER_FLAG_IPV6;
@@ -339,7 +360,8 @@ class StringSchema extends SanitizerSchema {
     /**
      * @param bool $onlyHttps
      */
-    private function processRuleURL(bool $onlyHttps): void {
+    private function processRuleURL(bool $onlyHttps): void
+    {
         $filtered = filter_var($this->value, FILTER_VALIDATE_URL);
         if (!$filtered) throw new SanitizerException(SanitizerException::ERR_STR_URL);
 
@@ -353,7 +375,8 @@ class StringSchema extends SanitizerSchema {
      * @param string $pattern
      * @param string|null $name
      */
-    private function processRuleRegex(string $pattern, ?string $name): void {
+    private function processRuleRegex(string $pattern, ?string $name): void
+    {
         $options = [
             'options' => ['regexp' => '/^' . $pattern . '$/'],
         ];

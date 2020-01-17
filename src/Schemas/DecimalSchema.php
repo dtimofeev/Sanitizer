@@ -1,13 +1,14 @@
 <?php
 
-namespace sanitizer\schemas;
+namespace Sanitizer\Schemas;
 
-use sanitizer\Sanitizer;
-use sanitizer\SanitizerException;
-use sanitizer\SanitizerSchema;
-use sanitizer\SanitizerSchema as SS;
+use Sanitizer\Sanitizer;
+use Sanitizer\SanitizerException;
+use Sanitizer\SanitizerSchema;
+use Sanitizer\SanitizerSchema as SS;
 
-class DecimalSchema extends SanitizerSchema {
+class DecimalSchema extends SanitizerSchema
+{
     private const RULE_MIN = 'min';
     private const RULE_MAX = 'max';
 
@@ -17,9 +18,9 @@ class DecimalSchema extends SanitizerSchema {
      * @return mixed
      * @throws SanitizerException
      */
-    public function process($input): string {
+    public function process($input): string
+    {
         if (!isset($input) && $this->optional) return $this->default;
-
         if (!is_numeric($input) || filter_var($input, FILTER_VALIDATE_FLOAT) === false) {
             throw new SanitizerException(SanitizerException::ERR_DEC_INVALID);
         }
@@ -51,7 +52,8 @@ class DecimalSchema extends SanitizerSchema {
      *
      * @return DecimalSchema
      */
-    public function optional($default = null): DecimalSchema {
+    public function optional($default = null): DecimalSchema
+    {
         if (isset($default) && !\is_numeric($default)) {
             throw new \InvalidArgumentException('Trying to set non-decimal default value for decimal schema.');
         }
@@ -68,7 +70,8 @@ class DecimalSchema extends SanitizerSchema {
      *
      * @return DecimalSchema
      */
-    public function min(int $value): DecimalSchema {
+    public function min(int $value): DecimalSchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type'  => self::RULE_MIN,
@@ -83,7 +86,8 @@ class DecimalSchema extends SanitizerSchema {
      *
      * @return DecimalSchema
      */
-    public function max(int $value): DecimalSchema {
+    public function max(int $value): DecimalSchema
+    {
         $self = $this->aliased ? clone $this : $this;
         $self->rules[] = [
             'type'  => self::RULE_MAX,
@@ -96,14 +100,20 @@ class DecimalSchema extends SanitizerSchema {
     /**
      * @param string|float|int $min
      */
-    private function processRuleMin($min): void {
-        if ($this->value < $min) throw new SanitizerException(SanitizerException::ERR_DEC_MIN, ['value' => $min]);
+    private function processRuleMin($min): void
+    {
+        if ($this->value < $min) {
+            throw new SanitizerException(SanitizerException::ERR_DEC_MIN, ['value' => $min]);
+        }
     }
 
     /**
      * @param string|float|int $max
      */
-    private function processRuleMax($max): void {
-        if ($this->value > $max) throw new SanitizerException(SanitizerException::ERR_DEC_MAX, ['value' => $max]);
+    private function processRuleMax($max): void
+    {
+        if ($this->value > $max) {
+            throw new SanitizerException(SanitizerException::ERR_DEC_MAX, ['value' => $max]);
+        }
     }
 }

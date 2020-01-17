@@ -1,16 +1,18 @@
 <?php
 
-namespace sanitizer\tests;
+namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-use sanitizer\Sanitizer;
-use sanitizer\SanitizerException;
-use sanitizer\SanitizerSchema;
-use sanitizer\SanitizerSchema as SS;
-use sanitizer\schemas\IntegerSchema;
+use Sanitizer\Sanitizer;
+use Sanitizer\SanitizerException;
+use Sanitizer\SanitizerSchema;
+use Sanitizer\SanitizerSchema as SS;
+use Sanitizer\Schemas\IntegerSchema;
 
-class IntegerTest extends TestCase {
-    public function testIsInstanceOfSanitizerSchema(): void {
+class IntegerTest extends TestCase
+{
+    public function testIsInstanceOfSanitizerSchema(): void
+    {
         $this->assertInstanceOf(
             SanitizerSchema::class,
             new IntegerSchema()
@@ -23,7 +25,8 @@ class IntegerTest extends TestCase {
      *
      * @dataProvider validCasesProvider
      */
-    public function testValidCases($input, $expected): void {
+    public function testValidCases($input, $expected): void
+    {
         $this->assertEquals($expected, Sanitizer::process($input, SS::integer()));
     }
 
@@ -46,7 +49,8 @@ class IntegerTest extends TestCase {
      *
      * @dataProvider invalidCasesProvider
      */
-    public function testInvalidCases($input): void {
+    public function testInvalidCases($input): void
+    {
         $this->expectException(SanitizerException::class);
         $this->expectExceptionCode(SanitizerException::ERR_INT_INVALID);
         Sanitizer::process($input, SS::integer());
@@ -55,7 +59,8 @@ class IntegerTest extends TestCase {
     /**
      * @return array
      */
-    public function invalidCasesProvider(): array {
+    public function invalidCasesProvider(): array
+    {
         return [
             'Value true' => [true],
             'Value false' => [false],
@@ -67,7 +72,8 @@ class IntegerTest extends TestCase {
         ];
     }
 
-    public function testRuleMin(): void {
+    public function testRuleMin(): void
+    {
         Sanitizer::process(1, SS::integer()->min(1));
 
         try {
@@ -81,7 +87,8 @@ class IntegerTest extends TestCase {
         }
     }
 
-    public function testRuleMax(): void {
+    public function testRuleMax(): void
+    {
         Sanitizer::process(1, SS::integer()->max(1));
 
         try {
@@ -95,7 +102,8 @@ class IntegerTest extends TestCase {
         }
     }
 
-    public function testRuleBetween(): void {
+    public function testRuleBetween(): void
+    {
         Sanitizer::process(1, SS::integer()->between(1, 100));
         Sanitizer::process(-1, SS::integer()->between(-100, 100));
 
@@ -123,7 +131,8 @@ class IntegerTest extends TestCase {
      *
      * @dataProvider validCasesProvider
      */
-    public function testRuleEquals($input, $expected): void {
+    public function testRuleEquals($input, $expected): void
+    {
         Sanitizer::process($input, SS::integer()->equals($expected));
 
         try {
@@ -137,7 +146,8 @@ class IntegerTest extends TestCase {
         }
     }
 
-    public function testRuleNot(): void {
+    public function testRuleNot(): void
+    {
         Sanitizer::process(1, SS::integer()->not(0));
 
         try {
@@ -151,7 +161,8 @@ class IntegerTest extends TestCase {
         }
     }
 
-    public function testRuleOneOf(): void {
+    public function testRuleOneOf(): void
+    {
         Sanitizer::process(1, SS::integer()->oneOf([0, 1]));
 
         try {
@@ -174,7 +185,8 @@ class IntegerTest extends TestCase {
         }
     }
 
-    public function testRuleNotOneOf(): void {
+    public function testRuleNotOneOf(): void
+    {
         Sanitizer::process(2, SS::integer()->notOneOf([0, 1]));
 
         try {
@@ -197,7 +209,8 @@ class IntegerTest extends TestCase {
         }
     }
 
-    public function testOptional(): void {
+    public function testOptional(): void
+    {
         $this->assertEquals(1, Sanitizer::process(null, SS::integer()->optional(1)));
 
         foreach ([

@@ -10,6 +10,13 @@
         "phpunit/phpunit": "^7"
     },
     "autoload": {
-        "psr-4": {"sanitizer\\": "src/"}
+        "psr-4": {
+            "Sanitizer\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     }
 }
